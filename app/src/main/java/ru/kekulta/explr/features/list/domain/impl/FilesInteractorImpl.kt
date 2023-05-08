@@ -20,8 +20,10 @@ class FilesInteractorImpl(private val repository: FilesRepository) : FilesIntera
             launch {
                 repository.insert(
                     FileRepresentation(
-                        Environment.getExternalStorageDirectory(),
-                        0
+                        file = Environment.getExternalStorageDirectory(),
+                        level = 0,
+                        isHidden = false,
+                        isNoMedia = false,
                     ).copy(parent = null)
                 )
             }
@@ -48,20 +50,31 @@ class FilesInteractorImpl(private val repository: FilesRepository) : FilesIntera
     suspend fun update(_path: String) {
         val path =
             if (File(_path).exists()) _path else Environment.getExternalStorageDirectory().path
+        repository.get(path)?.let {
+            recursiveUpdate(path, it.isHidden, it.isNoMedia)
+        }
+    }
+
+    private suspend fun recursiveUpdate(path: String, _isHidden: Boolean, _isNoMedia: Boolean) {
         val file = File(path)
         if (file.isDirectory) {
 
-            Log.d(LOG_TAG, "updating: $path")
+            //Log.d(LOG_TAG, "updating: $path")
 
             val parent = repository.get(path)
 
             if (file.exists() && parent != null) {
                 val filesDb = repository.getContent(path)
+                val isNoMedia =
+                    _isNoMedia || (file.listFiles() ?: arrayOf()).any { it.name == NOMEDIA }
+                val isHidden = _isHidden || file.isHidden
                 val files =
                     (file.listFiles() ?: arrayOf()).map {
                         FileRepresentation(
-                            it,
-                            parent.level + 1
+                            file = it,
+                            level = parent.level + 1,
+                            isHidden = it.isHidden || isHidden,
+                            isNoMedia = isNoMedia
                         )
                     }
                 files.forEach {
@@ -79,5 +92,6 @@ class FilesInteractorImpl(private val repository: FilesRepository) : FilesIntera
     companion object {
         const val LOG_TAG = "FilesInteractorImpl"
         private const val DOWNLOADS_DIRECTORY = "Download"
+        private const val NOMEDIA = ".nomedia"
     }
 }

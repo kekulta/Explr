@@ -37,7 +37,11 @@ class FileDto(
     @ColumnInfo(name = TYPE)
     var type: FileType,
     @ColumnInfo(name = LAST_MODIFIED)
-    val lastModified: Long
+    var lastModified: Long,
+    @ColumnInfo(name = IS_HIDDEN)
+    var isHidden: Boolean,
+    @ColumnInfo(name = IS_NOMEDIA)
+    var isNoMedia: Boolean,
 ) {
 
 
@@ -51,5 +55,7 @@ class FileDto(
         const val LEVEL = "file_level"
         const val TYPE = "file_type"
         const val LAST_MODIFIED = "file_last_modified"
+        const val IS_HIDDEN = "file_is_hidden"
+        const val IS_NOMEDIA = "file_nomedia"
     }
 }

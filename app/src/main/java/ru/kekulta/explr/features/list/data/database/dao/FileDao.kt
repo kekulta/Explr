@@ -58,26 +58,26 @@ interface FileDao {
         """
         SELECT * 
         FROM ${FileDto.TABLE}
-        WHERE ${FileDto.PARENT} = :path
+        WHERE ${FileDto.PARENT} = :path AND ((NOT ${FileDto.IS_HIDDEN}) OR :hidden) AND ((NOT ${FileDto.IS_NOMEDIA}) OR :nomedia)
         """
     )
-    fun observeContent(path: String): Flow<List<FileDto>>
+    fun observeContent(path: String, hidden: Boolean, nomedia: Boolean): Flow<List<FileDto>>
 
     @Query(
         """
         SELECT * 
         FROM ${FileDto.TABLE}
-        WHERE ${FileDto.TYPE} = :type
+        WHERE ${FileDto.TYPE} = :type AND ((NOT ${FileDto.IS_HIDDEN}) OR :hidden) AND ((NOT ${FileDto.IS_NOMEDIA}) OR :nomedia)
         """
     )
-    fun observeType(type: FileType): Flow<List<FileDto>>
+    fun observeType(type: FileType, hidden: Boolean, nomedia: Boolean): Flow<List<FileDto>>
 
     @Query(
         """
         SELECT * 
         FROM ${FileDto.TABLE}
-        WHERE ${FileDto.LAST_MODIFIED} > :from
+        WHERE ${FileDto.LAST_MODIFIED} > :from AND ((NOT ${FileDto.IS_HIDDEN}) OR :hidden) AND ((NOT ${FileDto.IS_NOMEDIA}) OR :nomedia)
         """
     )
-    fun observeRecent(from: Long): Flow<List<FileDto>>
+    fun observeRecent(from: Long, hidden: Boolean, nomedia: Boolean): Flow<List<FileDto>>
 }

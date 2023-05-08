@@ -6,7 +6,9 @@ import ru.kekulta.explr.features.list.data.FilesRepositoryImpl
 import ru.kekulta.explr.features.list.data.database.AppDatabase
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
+import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
+import ru.kekulta.explr.features.list.domain.impl.VisibilityManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
 import ru.kekulta.explr.shared.navigation.api.Router
 
@@ -19,6 +21,7 @@ object MainServiceLocator {
     private var router: Router? = null
     private var filesRepository: FilesRepository? = null
     private var filesInteractor: FilesInteractor? = null
+    private var visibilityManager: VisibilityManager? = null
 
     fun provideFilesInteractor(): FilesInteractor {
         if (filesInteractor == null) {
@@ -27,9 +30,16 @@ object MainServiceLocator {
         return filesInteractor!!
     }
 
-    fun provideFilesRepository(): FilesRepository {
+    fun provideVisibilityManager(): VisibilityManager {
+        if (visibilityManager == null) {
+            visibilityManager = VisibilityManagerImpl()
+        }
+        return visibilityManager!!
+    }
+
+    private fun provideFilesRepository(): FilesRepository {
         if (filesRepository == null) {
-            filesRepository = FilesRepositoryImpl(provideDatabase().getFileDao())
+            filesRepository = FilesRepositoryImpl(provideDatabase().getFileDao(), provideVisibilityManager())
         }
         return filesRepository!!
     }
@@ -48,9 +58,6 @@ object MainServiceLocator {
         }
         return router!!
     }
-
-    //TODO only for testing purposes
-    fun provideContext(): Context = context
 
     fun initDi(context: Context) {
         _context = context

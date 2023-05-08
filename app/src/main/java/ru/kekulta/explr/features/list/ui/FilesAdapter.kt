@@ -22,7 +22,8 @@ class FilesAdapter :
             binding.root.setOnClickListener {
                 onClickListener?.invoke(file.path)
             }
-            binding.fileName.text = file.name
+            binding.fileName.text =
+                "${file.name} isHidden:${file.isHidden} isNomedia: ${file.isNoMedia}"
             binding.fileIcon.setImageResource(
                 when (file.type) {
                     FileType.DIRECTORY -> R.drawable.directory_icon

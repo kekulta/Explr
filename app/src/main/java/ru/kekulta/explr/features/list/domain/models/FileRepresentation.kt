@@ -15,6 +15,8 @@ data class FileRepresentation(
     val level: Int,
     val type: FileType,
     val lastModified: Long,
+    val isHidden: Boolean,
+    val isNoMedia: Boolean,
 ) {
     constructor(file: FileDto) : this(
         path = file.path,
@@ -25,9 +27,11 @@ data class FileRepresentation(
         level = file.level,
         type = file.type,
         lastModified = file.lastModified,
+        isHidden = file.isHidden,
+        isNoMedia = file.isNoMedia,
     )
 
-    constructor(file: File, level: Int) : this(
+    constructor(file: File, level: Int, isHidden: Boolean, isNoMedia: Boolean,) : this(
         path = file.path,
         name = file.name,
         isDirectory = file.isDirectory,
@@ -36,6 +40,8 @@ data class FileRepresentation(
         level = level,
         type = file.type,
         lastModified = file.lastModified(),
+        isHidden = isHidden,
+        isNoMedia = isNoMedia,
     )
 
 
@@ -49,6 +55,8 @@ data class FileRepresentation(
             level = level,
             type = type,
             lastModified = lastModified,
+            isHidden = isHidden,
+            isNoMedia = isNoMedia,
         )
 
     companion object {

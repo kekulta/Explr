@@ -15,9 +15,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
-import ru.kekulta.explr.features.list.domain.representation.FilesListViewModel
+import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.shared.navigation.api.Command
-import ru.kekulta.explr.shared.utils.shortToast
 import java.io.File
 
 class FilesListFragment : Fragment() {

@@ -1,4 +1,4 @@
-package ru.kekulta.explr.features.list.domain.representation
+package ru.kekulta.explr.features.list.domain.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
