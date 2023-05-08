@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="?android:colorBackground"
+    tools:context=".features.main.ui.PermissionsDeniedFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_margin="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/permissions_denied_error"
+            android:textAlignment="center"
+            android:textColor="?colorOnBackground" />
+
+        <Button
+            android:id="@+id/permissions_button"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/give_permissions_button" />
+    </LinearLayout>
+</FrameLayout>
