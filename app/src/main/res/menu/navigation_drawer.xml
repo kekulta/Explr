@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/categories_group">
+        <item
+            android:id="@+id/recent_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Recent" />
+        <item
+            android:id="@+id/image_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Images" />
+        <item
+            android:id="@+id/videos_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Videos" />
+        <item
+            android:id="@+id/audio_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Audio" />
+        <item
+            android:id="@+id/documents_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Documents" />
+        <item
+            android:id="@+id/downloads_item"
+            android:checkable="true"
+            android:icon="@drawable/file_icon"
+            android:title="Downloads" />
+    </group>
+    <group android:id="@+id/storages_group">
+        <item
+            android:id="@+id/internal_storage"
+            android:checkable="true"
+            android:icon="@drawable/directory_icon"
+            android:title="Internal Storage" />
+    </group>
+</menu>

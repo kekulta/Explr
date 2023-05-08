@@ -1,13 +1,11 @@
 package ru.kekulta.explr.features.list.data.database
 
 import android.content.Context
-import android.os.Environment
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.kekulta.explr.features.list.data.database.dao.FileDao
 import ru.kekulta.explr.features.list.data.dto.FileDto
-import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 
 @Database(entities = [FileDto::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

@@ -49,6 +49,9 @@ object MainServiceLocator {
         return router!!
     }
 
+    //TODO only for testing purposes
+    fun provideContext(): Context = context
+
     fun initDi(context: Context) {
         _context = context
     }

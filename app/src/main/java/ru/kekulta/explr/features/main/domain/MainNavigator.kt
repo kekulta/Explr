@@ -61,7 +61,7 @@ class MainNavigator(
             PermissionsDeniedFragment.KEY -> PermissionsDeniedFragment().apply {
                 arguments = args
             }
-            FilesListFragment.KEY -> FilesListFragment().apply {
+            FilesListFragment.DESTINATION_KEY -> FilesListFragment().apply {
                 arguments = args
             }
             else -> throw IllegalArgumentException("Invalid screen")

@@ -3,17 +3,14 @@ package ru.kekulta.explr.features.main.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.explr.R
-import ru.kekulta.explr.databinding.FragmentPermissionsDeniedBinding
 import ru.kekulta.explr.databinding.FragmentPermissionsRequestBinding
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.requestFilesPermissions

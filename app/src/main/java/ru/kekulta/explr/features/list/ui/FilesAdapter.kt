@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FileItemBinding
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
-import ru.kekulta.explr.shared.utils.shortToast
-import java.io.File
+import ru.kekulta.explr.shared.utils.FileType
 
 class FilesAdapter :
     ListAdapter<FileRepresentation, FilesAdapter.Holder>(FileRepresentation.DIFF_CALLBACK) {
@@ -21,12 +20,17 @@ class FilesAdapter :
 
         fun onBind(file: FileRepresentation) {
             binding.root.setOnClickListener {
-                binding.root.context.shortToast("clicked: ${file.path}")
                 onClickListener?.invoke(file.path)
             }
             binding.fileName.text = file.name
-            //TODO fix concatenation
-            binding.fileIcon.setImageResource(if (file.isDirectory) R.drawable.directory_icon else R.drawable.file_icon)
+            binding.fileIcon.setImageResource(
+                when (file.type) {
+                    FileType.DIRECTORY -> R.drawable.directory_icon
+                    FileType.FILE -> R.drawable.file_icon
+                    FileType.IMAGE -> R.drawable.picture_icon
+                    else -> R.drawable.file_icon
+                }
+            )
         }
     }
 
