@@ -25,7 +25,7 @@ object MainServiceLocator {
 
     fun provideFilesInteractor(): FilesInteractor {
         if (filesInteractor == null) {
-            filesInteractor = FilesInteractorImpl(provideFilesRepository())
+            filesInteractor = FilesInteractorImpl(provideFilesRepository(), provideVisibilityManager())
         }
         return filesInteractor!!
     }
@@ -39,7 +39,7 @@ object MainServiceLocator {
 
     private fun provideFilesRepository(): FilesRepository {
         if (filesRepository == null) {
-            filesRepository = FilesRepositoryImpl(provideDatabase().getFileDao(), provideVisibilityManager())
+            filesRepository = FilesRepositoryImpl(provideDatabase().getFileDao())
         }
         return filesRepository!!
     }

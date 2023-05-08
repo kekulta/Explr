@@ -4,17 +4,22 @@ import android.app.Application
 import android.os.Environment
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
+import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.shared.utils.FileType
 import ru.kekulta.explr.shared.utils.shortToast
 import java.io.File
 
-class FilesInteractorImpl(private val repository: FilesRepository) : FilesInteractor {
+class FilesInteractorImpl(
+    private val repository: FilesRepository,
+    private val visibilityManager: VisibilityManager
+) : FilesInteractor {
     init {
         runBlocking {
             launch {
@@ -31,20 +36,69 @@ class FilesInteractorImpl(private val repository: FilesRepository) : FilesIntera
     }
 
     override fun observeContent(path: String): Flow<List<FileRepresentation>> = when {
-        path.startsWith(FilesInteractor.DOWNLOADS_CATEGORY) -> repository.observeContent(Environment.getExternalStorageDirectory().path + File.separator + DOWNLOADS_DIRECTORY)
-        path.startsWith(FilesInteractor.RECENT_CATEGORY) -> repository.observeRecent()
-        path.startsWith(FilesInteractor.AUDIO_CATEGORY) -> repository.observeType(FileType.AUDIO)
-        path.startsWith(FilesInteractor.VIDEOS_CATEGORY) -> repository.observeType(FileType.VIDEO)
-        path.startsWith(FilesInteractor.DOCUMENTS_CATEGORY) -> repository.observeType(FileType.DOCUMENT)
-        path.startsWith(FilesInteractor.IMAGES_CATEGORY) -> repository.observeType(FileType.IMAGE)
-        path.startsWith(FilesInteractor.STORAGE_CATEGORY) -> repository.observeContent(
-            path.replace(
-                FilesInteractor.STORAGE_CATEGORY,
-                Environment.getExternalStorageDirectory().path
+        path.startsWith(FilesInteractor.DOWNLOADS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeContent(
+                Environment.getExternalStorageDirectory().path + File.separator + DOWNLOADS_DIRECTORY,
+                hidden,
+                nomedia
             )
-        )
+        }
 
-        else -> repository.observeContent(path)
+        path.startsWith(FilesInteractor.RECENT_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeRecent(
+                hidden,
+                nomedia
+            )
+        }
+
+        path.startsWith(FilesInteractor.AUDIO_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeType(
+                FileType.AUDIO,
+                hidden,
+                nomedia
+            )
+        }
+
+        path.startsWith(FilesInteractor.VIDEOS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeType(
+                FileType.VIDEO,
+                hidden,
+                nomedia
+            )
+        }
+
+        path.startsWith(FilesInteractor.DOCUMENTS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeType(
+                FileType.DOCUMENT,
+                hidden,
+                nomedia
+            )
+        }
+
+        path.startsWith(FilesInteractor.IMAGES_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+            repository.observeType(
+                FileType.IMAGE,
+                hidden,
+                nomedia
+            )
+        }
+
+        path.startsWith(FilesInteractor.STORAGE_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, _ ->
+            repository.observeContent(
+                path.replace(
+                    FilesInteractor.STORAGE_CATEGORY,
+                    Environment.getExternalStorageDirectory().path
+                ), hidden, true
+            )
+        }
+
+        else -> visibilityManager.observeHiddenNomedia { hidden, _ ->
+            repository.observeContent(
+                path,
+                hidden,
+                true
+            )
+        }
     }
 
     suspend fun update(_path: String) {

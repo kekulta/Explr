@@ -7,12 +7,6 @@
     android:orientation="vertical"
     tools:context=".features.list.ui.FilesListFragment">
 
-    <TextView
-        android:id="@+id/location_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/files_recycler"
         android:layout_width="match_parent"

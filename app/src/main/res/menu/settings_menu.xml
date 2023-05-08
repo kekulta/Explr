@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/hidden_item"
+        android:checkable="true"
+        android:title="Show hidden files" />
+    <item
+        android:id="@+id/nomedia_item"
+        android:checkable="true"
+        android:title="Show .nomedia files in the Categories" />
+</menu>

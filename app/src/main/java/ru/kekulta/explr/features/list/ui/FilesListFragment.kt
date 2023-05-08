@@ -58,8 +58,8 @@ class FilesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.locationTextview.text =
-            location?.joinToString(separator = " -> ") ?: "No such file or directory"
+//        binding.locationTextview.text =
+//            location?.joinToString(separator = " -> ") ?: "No such file or directory"
         path?.let {
             lifecycleScope.launch {
                 viewModel.subscribe(it).collect { list ->

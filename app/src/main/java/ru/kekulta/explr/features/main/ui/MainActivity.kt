@@ -34,13 +34,25 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         )
 
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            viewModel.settingsClicked(menuItem.itemId)
+        }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            binding.drawerLayout.open()
+        }
+
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             binding.drawerLayout.close()
             viewModel.drawerClicked(menuItem.itemId)
         }
 
-        viewModel.drawer.observe(this) {
-            binding.navigationView.menu.findItem(it).isChecked = true
+        viewModel.state.observe(this) { state ->
+            binding.navigationView.menu.findItem(state.drawerItem).isChecked = true
+            binding.topAppBar.menu.apply {
+                findItem(R.id.hidden_item).isChecked = state.hidden
+                findItem(R.id.nomedia_item).isChecked = state.nomedia
+            }
         }
 
 

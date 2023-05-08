@@ -13,21 +13,33 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="?android:colorBackground"
+            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context=".features.main.ui.MainActivity">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/topAppBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:menu="@menu/settings_menu"
+                    app:navigationIcon="@drawable/menu_icon" />
+
+            </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/main_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </FrameLayout>
-
-        <!-- Use app:layout_behavior="@string/appbar_scrolling_view_behavior" to fit below top app bar -->
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
