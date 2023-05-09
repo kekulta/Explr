@@ -142,7 +142,7 @@ class FilesInteractorImpl(
     }
 
     //TODO return to single function
-    suspend fun update(_path: String): Double {
+    override suspend fun update(_path: String): Double {
         val path =
             if (File(_path).exists()) _path else Environment.getExternalStorageDirectory().path
         return repository.get(path)?.let {

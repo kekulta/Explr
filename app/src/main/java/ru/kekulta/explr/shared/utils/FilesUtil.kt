@@ -2,6 +2,7 @@ package ru.kekulta.explr.shared.utils
 
 import android.content.Context
 import android.content.Intent
+import android.os.Environment
 import androidx.core.content.FileProvider
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import java.io.File
@@ -148,12 +149,16 @@ val File.type: FileType
         }
     }
 
-fun FileRepresentation.shareFile(context: Context) {
-    val file = File(path)
+val FileRepresentation.file: File
+    get() = File(path)
+
+fun FileRepresentation.shareFile(context: Context) = this.file.shareFile(context)
+
+fun File.shareFile(context: Context) {
 
     //TODO change authority
-    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
-    val mime: String? = when (file.type) {
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", this)
+    val mime: String? = when (type) {
         FileType.IMAGE -> "image/*"
         FileType.VIDEO -> "video/*"
         FileType.AUDIO -> "audio/*"
@@ -167,12 +172,13 @@ fun FileRepresentation.shareFile(context: Context) {
     context.startActivity(intent)
 }
 
+fun FileRepresentation.deleteRecursively() = file.deleteRecursively()
+
 fun File.openFile(context: Context) {
-    val file = File(path)
 
     //TODO change authority
-    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
-    val mime: String? = when (file.type) {
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", this)
+    val mime: String? = when (type) {
         FileType.IMAGE -> "image/*"
         FileType.VIDEO -> "video/*"
         FileType.AUDIO -> "audio/*"
@@ -185,3 +191,6 @@ fun File.openFile(context: Context) {
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     context.startActivity(intent)
 }
+
+fun FileRepresentation.requireParent(): String =
+    parent ?: Environment.getExternalStorageDirectory().path

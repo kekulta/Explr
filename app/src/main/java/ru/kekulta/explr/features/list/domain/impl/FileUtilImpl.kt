@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.core.content.FileProvider
 import ru.kekulta.explr.features.list.domain.api.FileUtil
 import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.shared.utils.openFile
+import ru.kekulta.explr.shared.utils.shareFile
 import ru.kekulta.explr.shared.utils.type
 import java.io.File
 
@@ -24,6 +26,15 @@ class FileUtilImpl(private val context: Context) : FileUtil {
                 else -> file.type
             }
         }
+
+
+    override fun openFile(file: File) {
+        file.openFile(context)
+    }
+
+    override fun shareFile(file: File) {
+        file.shareFile(context)
+    }
 
     companion object {
         const val LOG_TAG = "TypeCheckerImpl"

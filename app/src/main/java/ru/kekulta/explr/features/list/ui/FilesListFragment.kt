@@ -36,48 +36,7 @@ class FilesListFragment : Fragment() {
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: FilesListViewModel by viewModels({ requireActivity() }) { FilesListViewModel.Factory }
     private var state: FilesListState? = null
-    private val filesAdapter = FilesAdapter().apply {
-        onEventListener = { event ->
-            when (event) {
-                is FileClickEvent.Click -> {
-                    File(event.file.path).let { file ->
-                        if (file.exists()) {
-                            if (file.isDirectory) {
-                                MainServiceLocator.provideRouter().navigate(
-                                    //TODO Fix navigation
-                                    Command.ForwardTo(
-                                        DESTINATION_KEY, bundleOf(
-                                            STATE_KEY to state?.let {
-                                                it.copy(
-                                                    location = it.location + file.name,
-                                                    path = event.file.path
-                                                )
-                                            }
-                                        )
-                                    )
-                                )
-                            } else {
-                                file.openFile(requireContext())
-                            }
-                        }
-                    }
-                }
-
-                is FileClickEvent.Delete -> {
-                    lifecycleScope.launch {
-                        File(event.file.path).deleteRecursively()
-
-                    }
-                }
-
-                is FileClickEvent.Share -> {
-                    event.file.shareFile(requireContext())
-                }
-            }
-
-
-        }
-    }
+    private val filesAdapter = FilesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,18 +69,15 @@ class FilesListFragment : Fragment() {
 
 
             binding.filesRecycler.apply {
-
-                adapter = filesAdapter
+                adapter = filesAdapter.apply {
+                    onEventListener = viewModel::fileEvent
+                }
                 layoutManager = LinearLayoutManager(requireContext())
             }
+
         }
 
-        viewModel.onResume(
-            ToolBarState(
-                state?.root ?: R.string.no_root,
-                state?.location ?: arrayOf()
-            )
-        )
+        viewModel.onResume(state)
     }
 
     companion object {

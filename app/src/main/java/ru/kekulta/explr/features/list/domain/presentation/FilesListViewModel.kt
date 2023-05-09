@@ -1,34 +1,93 @@
 package ru.kekulta.explr.features.list.domain.presentation
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
+import ru.kekulta.explr.features.list.domain.api.FileUtil
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
+import ru.kekulta.explr.features.list.domain.models.FileClickEvent
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
+import ru.kekulta.explr.features.list.domain.models.FilesListState
+import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
+import ru.kekulta.explr.shared.navigation.api.Command
+import ru.kekulta.explr.shared.utils.deleteRecursively
+import ru.kekulta.explr.shared.utils.file
+import ru.kekulta.explr.shared.utils.requireParent
+import ru.kekulta.explr.shared.utils.shareFile
+import java.io.File
 
 class FilesListViewModel(
-    private val interactor: FilesInteractor,
-    private val toolBarManager: ToolBarManager
+    private val filesInteractor: FilesInteractor,
+    private val toolBarManager: ToolBarManager,
+    private val fileUtil: FileUtil,
 ) :
     ViewModel() {
+    private var state: FilesListState? = null
 
+    fun fileEvent(event: FileClickEvent) {
+        when (event) {
+            is FileClickEvent.Click -> {
+                File(event.file.path).let { file ->
+                    if (file.exists()) {
+                        if (file.isDirectory) {
+                            navigateTo(file)
+                        } else {
+                            fileUtil.openFile(file)
+                        }
+                    }
+                }
+            }
+
+            is FileClickEvent.Delete -> {
+                viewModelScope.launch {
+                    event.file.deleteRecursively()
+                    filesInteractor.update(event.file.requireParent())
+                }
+            }
+
+            is FileClickEvent.Share -> {
+                fileUtil.shareFile(event.file.file)
+            }
+        }
+    }
 
     fun subscribe(path: String): Flow<List<FileRepresentation>> =
-        interactor.observeContent(path).also {
+        filesInteractor.observeContent(path).also {
             viewModelScope.launch {
-                (interactor as FilesInteractorImpl).update(path)
+                filesInteractor.update(path)
             }
         }
 
-    fun onResume(toolBarState: ToolBarState) {
-        toolBarManager.toolBarState = toolBarState
+    fun onResume(state: FilesListState?) {
+        this.state = state
+        toolBarManager.toolBarState = ToolBarState(
+            state?.root ?: R.string.no_root,
+            state?.location ?: arrayOf()
+        )
+    }
+
+    private fun navigateTo(file: File) {
+        MainServiceLocator.provideRouter().navigate(
+            Command.ForwardTo(
+                FilesListFragment.DESTINATION_KEY, bundleOf(
+                    FilesListFragment.STATE_KEY to state?.let {
+                        it.copy(
+                            location = it.location + file.name,
+                            path = file.path
+                        )
+                    }
+                )
+            )
+        )
     }
 
 
@@ -39,6 +98,7 @@ class FilesListViewModel(
                 FilesListViewModel(
                     MainServiceLocator.provideFilesInteractor(),
                     MainServiceLocator.provideToolBarManager(),
+                    MainServiceLocator.provideFileUtil(),
                 )
             }
         }

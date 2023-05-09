@@ -6,5 +6,6 @@ import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 
 interface FilesInteractor {
     fun observeContent(path: String): Flow<List<FileRepresentation>>
+    suspend fun update(_path: String): Double
 
 }

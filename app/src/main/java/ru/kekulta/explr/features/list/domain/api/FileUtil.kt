@@ -5,4 +5,6 @@ import java.io.File
 
 interface FileUtil {
     fun getType(file: File): FileType
+    fun openFile(file: File)
+    fun shareFile(file: File)
 }
