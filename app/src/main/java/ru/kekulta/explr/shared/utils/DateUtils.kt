@@ -2,7 +2,6 @@ package ru.kekulta.explr.shared.utils
 
 import android.content.res.Resources
 import ru.kekulta.explr.R
-import java.lang.IllegalArgumentException
 import java.util.Calendar
 
 fun Resources.getMonth(number: Int): String = when (number) {

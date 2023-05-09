@@ -31,4 +31,6 @@
     <string name="month_december">December</string>
     <string name="file_size_placeholder">%1$dKb</string>
     <string name="month_day_placeholder">%1$s %2$d</string>
+    <string name="sort_by_title">Sort by...</string>
+    <string name="close">Close</string>
 </resources>

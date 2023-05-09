@@ -1,6 +1,5 @@
 package ru.kekulta.explr.features.list.domain.impl
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import ru.kekulta.explr.features.list.domain.api.FilterManager

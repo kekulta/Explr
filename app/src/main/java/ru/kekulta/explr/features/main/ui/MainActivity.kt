@@ -1,18 +1,13 @@
 package ru.kekulta.explr.features.main.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.ActivityMainBinding
@@ -69,33 +64,40 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(
                 separator = " -> "
             ).let { path ->
-                if (binding.pathTextview.text != path) {
-                    binding.pathTextview.text = path
-                    binding.pathScrollview.let { scroll ->
-                        scroll.post { scroll.scrollToBottom() }
+                state.toolBarState.let { toolBarState ->
+                    if (toolBarState.location.isEmpty()) {
+                        binding.pathTextview.text = ""
+                        binding.topAppBar.title = getString(toolBarState.root)
+                    } else {
+                        if (binding.pathTextview.text != path) {
+                            binding.pathTextview.text = path
+                            binding.pathScrollview.let { scroll ->
+                                scroll.post { scroll.scrollToBottom() }
+                            }
+                            binding.topAppBar.title = toolBarState.location.last()
+                        }
                     }
                 }
+
+
             }
         }
         lifecycleScope.launch {
             viewModel.eventsFlow.collect { event ->
                 when (event) {
-                    // TODO Locator in ui
-                    MainEvent.SHOW_SORT_MENU -> {
+                    is MainEvent.ShowSortMenu -> {
 
                         val options =
-                            SortType.values().map { resources.getString(it.id) }.toTypedArray()
-                        val current = MainServiceLocator.provideSortingManager().type.ordinal
-
-                        //TODO hardcoded strings
+                            SortType.values().map { getString(it.id) }.toTypedArray()
+                        val current = event.state.ordinal
 
                         MaterialAlertDialogBuilder(this@MainActivity)
-                            .setTitle("Sort by...")
+                            .setTitle(getString(R.string.sort_by_title))
                             .setSingleChoiceItems(options, current) { _, option ->
                                 MainServiceLocator.provideSortingManager().type =
                                     SortType.values()[option]
                             }
-                            .setNegativeButton("Close") { _, _ -> }
+                            .setNegativeButton(getString(R.string.close)) { _, _ -> }
                             .show()
                     }
                 }

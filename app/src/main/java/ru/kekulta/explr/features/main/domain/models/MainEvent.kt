@@ -1,5 +1,7 @@
 package ru.kekulta.explr.features.main.domain.models
 
-enum class MainEvent {
-    SHOW_SORT_MENU
+import ru.kekulta.explr.features.list.domain.models.SortType
+
+sealed class MainEvent {
+    class ShowSortMenu(val state: SortType): MainEvent()
 }

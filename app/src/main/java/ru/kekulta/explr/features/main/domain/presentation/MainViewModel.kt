@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
-import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.FilterManager
+import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.domain.models.FilesListState
 import ru.kekulta.explr.features.list.domain.models.FilterState
@@ -143,7 +143,6 @@ class MainViewModel(
         return true
     }
 
-    //TODO change extension
     private fun Router.navigateToList(category: Category) {
         this.navigate(
             Command.ForwardTo(
@@ -173,7 +172,7 @@ class MainViewModel(
             }
 
             R.id.sorting_item -> {
-                viewModelScope.launch { eventChannel.send(MainEvent.SHOW_SORT_MENU) }
+                viewModelScope.launch { eventChannel.send(MainEvent.ShowSortMenu(sortingManager.type)) }
                 true
             }
 

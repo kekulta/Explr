@@ -2,7 +2,6 @@ package ru.kekulta.explr.features.main.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import ru.kekulta.explr.R
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 

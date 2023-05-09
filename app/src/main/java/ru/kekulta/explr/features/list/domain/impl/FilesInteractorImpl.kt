@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.kekulta.explr.features.list.domain.api.FileUtil
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
-import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.FilterManager
-import ru.kekulta.explr.features.list.domain.api.FileUtil
+import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.SortType

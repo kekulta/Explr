@@ -1,9 +1,6 @@
 package ru.kekulta.explr.features.list.domain.api
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import ru.kekulta.explr.features.list.data.FilesRepositoryImpl
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.shared.utils.FileType
 
