@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.PARENT
 import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.PATH
 import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.TABLE
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 @Entity(
     tableName = TABLE,

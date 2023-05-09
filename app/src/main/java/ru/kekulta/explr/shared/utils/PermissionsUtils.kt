@@ -57,8 +57,5 @@ fun Activity.requestFilesPermissions() {
             ),
             FILE_PERMISSION_REQUEST_CODE
         )
-
-
     }
-
 }

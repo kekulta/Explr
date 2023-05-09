@@ -1,9 +1,9 @@
-package ru.kekulta.explr.features.list.domain.api
+package ru.kekulta.explr.features.list.domain.api.usecases
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import ru.kekulta.explr.features.list.domain.models.SortType
+import ru.kekulta.explr.features.list.domain.models.enums.SortType
 
 interface SortingManager {
     var type: SortType

@@ -2,8 +2,8 @@ package ru.kekulta.explr.features.list.domain.impl
 
 import android.content.Context
 import androidx.core.content.FileProvider
-import ru.kekulta.explr.features.list.domain.api.FileUtil
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.api.usecases.FileUtil
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 import ru.kekulta.explr.shared.utils.type
 import java.io.File
 

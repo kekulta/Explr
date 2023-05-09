@@ -2,8 +2,8 @@ package ru.kekulta.explr.features.list.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import ru.kekulta.explr.features.list.domain.api.FilterManager
-import ru.kekulta.explr.features.list.domain.models.FilterState
+import ru.kekulta.explr.features.list.domain.api.usecases.FilterManager
+import ru.kekulta.explr.features.list.domain.models.states.FilterState
 
 class FilterManagerImpl(filterState: FilterState = FilterState()) :
     FilterManager {

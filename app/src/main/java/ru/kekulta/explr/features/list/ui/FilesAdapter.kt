@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FileItemBinding
-import ru.kekulta.explr.features.list.domain.models.FileClickEvent
+import ru.kekulta.explr.features.list.domain.models.events.FileClickEvent
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 import ru.kekulta.explr.shared.utils.dayOfMonth
 import ru.kekulta.explr.shared.utils.getMonth
 import ru.kekulta.explr.shared.utils.gone

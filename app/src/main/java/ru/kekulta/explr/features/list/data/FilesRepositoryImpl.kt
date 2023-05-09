@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.map
 import ru.kekulta.explr.features.list.data.database.dao.FileDao
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 class FilesRepositoryImpl(
     private val dao: FileDao

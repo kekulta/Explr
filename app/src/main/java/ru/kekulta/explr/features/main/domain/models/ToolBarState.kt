@@ -1,8 +1,6 @@
 package ru.kekulta.explr.features.main.domain.models
 
-import androidx.annotation.StringRes
-import ru.kekulta.explr.R
-import ru.kekulta.explr.features.list.domain.models.Category
+import ru.kekulta.explr.features.list.domain.models.enums.Category
 
 data class ToolBarState(
     val root: Category = Category.STORAGE,

@@ -1,4 +1,6 @@
-package ru.kekulta.explr.features.list.domain.models
+package ru.kekulta.explr.features.list.domain.models.events
+
+import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 
 sealed class FileClickEvent(val file: FileRepresentation) {
     class Click(file: FileRepresentation) : FileClickEvent(file)

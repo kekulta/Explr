@@ -1,4 +1,4 @@
-package ru.kekulta.explr.features.list.domain.models
+package ru.kekulta.explr.features.list.domain.models.events
 
 import java.io.File
 

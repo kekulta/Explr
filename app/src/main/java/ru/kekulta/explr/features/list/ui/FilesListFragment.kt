@@ -14,8 +14,8 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.databinding.FragmentListBinding
-import ru.kekulta.explr.features.list.domain.models.FilesListState
-import ru.kekulta.explr.features.list.domain.models.ListEvent
+import ru.kekulta.explr.features.list.domain.models.states.FilesListState
+import ru.kekulta.explr.features.list.domain.models.events.ListEvent
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.shared.utils.openFile
 import ru.kekulta.explr.shared.utils.shareFile

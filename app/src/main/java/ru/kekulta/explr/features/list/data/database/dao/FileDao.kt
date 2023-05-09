@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.kekulta.explr.features.list.data.dto.FileDto
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 @Dao
 interface FileDao {

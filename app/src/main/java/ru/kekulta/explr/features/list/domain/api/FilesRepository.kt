@@ -2,7 +2,7 @@ package ru.kekulta.explr.features.list.domain.api
 
 import kotlinx.coroutines.flow.Flow
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
-import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 interface FilesRepository {
     fun observeRecent(hidden: Boolean, nomedia: Boolean): Flow<List<FileRepresentation>>

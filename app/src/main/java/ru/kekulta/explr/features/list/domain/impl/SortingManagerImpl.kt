@@ -2,8 +2,8 @@ package ru.kekulta.explr.features.list.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import ru.kekulta.explr.features.list.domain.api.SortingManager
-import ru.kekulta.explr.features.list.domain.models.SortType
+import ru.kekulta.explr.features.list.domain.api.usecases.SortingManager
+import ru.kekulta.explr.features.list.domain.models.enums.SortType
 
 class SortingManagerImpl(type: SortType = SortType.NAME, reversed: Boolean = false) :
     SortingManager {

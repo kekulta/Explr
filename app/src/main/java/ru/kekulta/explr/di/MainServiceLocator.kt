@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import ru.kekulta.explr.features.list.data.FilesRepositoryImpl
 import ru.kekulta.explr.features.list.data.database.AppDatabase
-import ru.kekulta.explr.features.list.domain.api.FileUtil
-import ru.kekulta.explr.features.list.domain.api.FilesInteractor
+import ru.kekulta.explr.features.list.domain.api.usecases.FileUtil
+import ru.kekulta.explr.features.list.domain.api.usecases.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
-import ru.kekulta.explr.features.list.domain.api.FilterManager
-import ru.kekulta.explr.features.list.domain.api.SortingManager
+import ru.kekulta.explr.features.list.domain.api.usecases.FilterManager
+import ru.kekulta.explr.features.list.domain.api.usecases.SortingManager
 import ru.kekulta.explr.features.list.domain.impl.FileUtilImpl
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.impl.FilterManagerImpl

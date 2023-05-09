@@ -5,38 +5,38 @@
             android:id="@+id/recent_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/recent_title" />
+            android:title="@string/recent_root" />
         <item
             android:id="@+id/image_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/images_title" />
+            android:title="@string/images_root" />
         <item
             android:id="@+id/videos_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/videos_title" />
+            android:title="@string/videos_root" />
         <item
             android:id="@+id/audio_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/audio_title" />
+            android:title="@string/audio_root" />
         <item
             android:id="@+id/documents_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/documents_title" />
+            android:title="@string/documents_root" />
         <item
             android:id="@+id/downloads_item"
             android:checkable="true"
             android:icon="@drawable/file_icon"
-            android:title="@string/downloads_title" />
+            android:title="@string/downloads_root" />
     </group>
     <group android:id="@+id/storages_group">
         <item
             android:id="@+id/internal_storage"
             android:checkable="true"
             android:icon="@drawable/directory_icon"
-            android:title="@string/internal_storage_title" />
+            android:title="@string/internal_storage_root" />
     </group>
 </menu>

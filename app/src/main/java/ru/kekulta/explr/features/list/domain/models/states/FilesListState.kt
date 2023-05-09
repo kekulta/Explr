@@ -1,7 +1,8 @@
-package ru.kekulta.explr.features.list.domain.models
+package ru.kekulta.explr.features.list.domain.models.states
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.kekulta.explr.features.list.domain.models.enums.Category
 
 @Parcelize
 data class FilesListState(

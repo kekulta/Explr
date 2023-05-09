@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.ActivityMainBinding
 import ru.kekulta.explr.di.MainServiceLocator
-import ru.kekulta.explr.features.list.domain.models.SortType
+import ru.kekulta.explr.features.list.domain.models.enums.SortType
 import ru.kekulta.explr.features.main.domain.MainNavigator
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel

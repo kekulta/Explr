@@ -3,7 +3,6 @@ package ru.kekulta.explr.features.main.domain.presentation
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,11 +13,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
-import ru.kekulta.explr.features.list.domain.api.FilterManager
-import ru.kekulta.explr.features.list.domain.api.SortingManager
-import ru.kekulta.explr.features.list.domain.models.Category
-import ru.kekulta.explr.features.list.domain.models.FilesListState
-import ru.kekulta.explr.features.list.domain.models.FilterState
+import ru.kekulta.explr.features.list.domain.api.usecases.FilterManager
+import ru.kekulta.explr.features.list.domain.api.usecases.SortingManager
+import ru.kekulta.explr.features.list.domain.models.enums.Category
+import ru.kekulta.explr.features.list.domain.models.states.FilesListState
+import ru.kekulta.explr.features.list.domain.models.states.FilterState
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.models.MainEvent

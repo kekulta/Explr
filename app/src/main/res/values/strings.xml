@@ -1,19 +1,19 @@
 <resources>
-    <string name="app_name">Explr</string>
-    <string name="permissions_denied_error">Looks like you did not give permissions, without permissions application can\'t access files and work properly. Please give permissions to continue with the application</string>
+    <string name="app_name" translatable="false">Explr</string>
+    <string name="permissions_denied_error">Looks like you did not give permissions, without permissions application can\'t access files and work properly. Please give permissions to continue with the application.</string>
     <string name="no_permissions_rationale">This application is a File Explorer, it needs permissions to access your files to work. Without this permission application can\'t perform any of its functions. To continue work with our application you need to grant this permission.</string>
     <string name="give_permissions_button">Grant permissions</string>
-    <string name="no_sort_title">NO SORT</string>
-    <string name="sort_by_name_title">Sort by name</string>
-    <string name="sort_by_creation_title">Sort by creation time</string>
-    <string name="sort_by_modified_title">Sort by modify time</string>
-    <string name="sort_by_size_title">Sort by size</string>
-    <string name="sort_by_type">Sort by file type</string>
+    <string name="sort_by_creation_title">by creation time</string>
     <string name="videos_root">Videos</string>
     <string name="audio_root">Audio</string>
+    <string name="no_sort_title">by default</string>
+    <string name="sort_by_name_title">by filename</string>
+    <string name="sort_by_type_title">by file type</string>
+    <string name="sort_by_size_title">by size</string>
+    <string name="sort_by_modified_title">by modify time</string>
     <string name="documents_root">Documents</string>
     <string name="images_root">Images</string>
-    <string name="internal_storage">Internal Storage</string>
+    <string name="internal_storage_root">Internal Storage</string>
     <string name="downloads_root">Downloads</string>
     <string name="recent_root">Recent</string>
     <string name="no_root">Undefined</string>
@@ -36,14 +36,7 @@
     <string name="drawer_header">Files</string>
     <string name="share_title">Share</string>
     <string name="delete_title">Delete</string>
-    <string name="recent_title">Recent</string>
-    <string name="images_title">Images</string>
-    <string name="videos_title">Videos</string>
-    <string name="audio_title">Audio</string>
-    <string name="documents_title">Documents</string>
-    <string name="downloads_title">Downloads</string>
-    <string name="internal_storage_title">Internal Storage</string>
-    <string name="reverse_items_title">Reverse items</string>
+    <string name="reverse_items_title">Reverse order</string>
     <string name="show_hidden_files_title">Show hidden files</string>
     <string name="show_nomedia_files_title">Show .nomedia files in the Categories</string>
 </resources>
