@@ -18,6 +18,7 @@ import ru.kekulta.explr.features.list.domain.models.SortType
 import ru.kekulta.explr.shared.utils.FileType
 import ru.kekulta.explr.shared.utils.extension
 import ru.kekulta.explr.shared.utils.shortToast
+import ru.kekulta.explr.shared.utils.size
 import java.io.File
 
 class FilesInteractorImpl(
@@ -132,17 +133,22 @@ class FilesInteractorImpl(
         }
     }
 
-    suspend fun update(_path: String) {
+    //TODO return to single function
+    suspend fun update(_path: String): Double {
         val path =
             if (File(_path).exists()) _path else Environment.getExternalStorageDirectory().path
-        repository.get(path)?.let {
+        return repository.get(path)?.let {
             recursiveUpdate(path, it.isHidden, it.isNoMedia)
-        }
+        } ?: 0.0
     }
 
-    private suspend fun recursiveUpdate(path: String, _isHidden: Boolean, _isNoMedia: Boolean) {
+    private suspend fun recursiveUpdate(
+        path: String,
+        _isHidden: Boolean,
+        _isNoMedia: Boolean
+    ): Double {
         val file = File(path)
-        if (file.isDirectory) {
+        return if (file.isDirectory) {
 
             val parent = repository.get(path)
 
@@ -160,15 +166,22 @@ class FilesInteractorImpl(
                             isNoMedia = isNoMedia
                         )
                     }
+                val filesSet = files.map { it.path }.toSet()
                 files.forEach {
                     repository.update(it)
                     repository.insert(it)
                 }
-                filesDb.filterNot { it in files }.forEach { repository.delete(it.path) }
-                file.listFiles()?.filter { it.isDirectory }?.forEach { f: File -> update(f.path) }
+                filesDb.filterNot { it.path in filesSet }.forEach { repository.delete(it.path) }
+                val size =
+                    (file.listFiles()?.sumOf { f: File -> update(f.path) } ?: 0.0) + file.size
+                repository.updateSize(path, size)
+                size
             } else {
                 repository.delete(path)
+                0.0
             }
+        } else {
+            file.size
         }
     }
 

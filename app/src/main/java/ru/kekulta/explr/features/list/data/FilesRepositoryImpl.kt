@@ -63,6 +63,10 @@ class FilesRepositoryImpl(
         dao.insert(file.toDto())
     }
 
+    override suspend fun updateSize(path: String, size: Double) {
+        dao.updateSize(path, size)
+    }
+
     override suspend fun update(file: FileRepresentation) {
         dao.update(file.toDto())
     }

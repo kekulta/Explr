@@ -27,6 +27,7 @@ interface FilesRepository {
     suspend fun delete(file: FileRepresentation)
     suspend fun delete(path: String)
     suspend fun insert(file: FileRepresentation)
+    suspend fun updateSize(path: String, size: Double)
     suspend fun update(file: FileRepresentation)
 }
 

@@ -33,7 +33,7 @@ interface FileDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dto: FileDto)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(dto: FileDto)
 
     @Query(
@@ -80,4 +80,7 @@ interface FileDao {
         """
     )
     fun observeRecent(from: Long, hidden: Boolean, nomedia: Boolean): Flow<List<FileDto>>
+
+    @Query("UPDATE ${FileDto.TABLE} SET ${FileDto.SIZE} = :size WHERE ${FileDto.PATH}=:path")
+    fun updateSize(path: String, size: Double)
 }
