@@ -3,6 +3,8 @@ package ru.kekulta.explr.features.list.domain.models
 import androidx.recyclerview.widget.DiffUtil
 import ru.kekulta.explr.features.list.data.dto.FileDto
 import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.shared.utils.size
+import ru.kekulta.explr.shared.utils.sizeInKb
 import ru.kekulta.explr.shared.utils.type
 import java.io.File
 
@@ -17,6 +19,7 @@ data class FileRepresentation(
     val lastModified: Long,
     val isHidden: Boolean,
     val isNoMedia: Boolean,
+    val size: Double,
 ) {
     constructor(file: FileDto) : this(
         path = file.path,
@@ -29,9 +32,10 @@ data class FileRepresentation(
         lastModified = file.lastModified,
         isHidden = file.isHidden,
         isNoMedia = file.isNoMedia,
+        size = file.size
     )
 
-    constructor(file: File, level: Int, isHidden: Boolean, isNoMedia: Boolean,) : this(
+    constructor(file: File, level: Int, isHidden: Boolean, isNoMedia: Boolean) : this(
         path = file.path,
         name = file.name,
         isDirectory = file.isDirectory,
@@ -42,6 +46,7 @@ data class FileRepresentation(
         lastModified = file.lastModified(),
         isHidden = isHidden,
         isNoMedia = isNoMedia,
+        size = file.size
     )
 
 
@@ -57,6 +62,7 @@ data class FileRepresentation(
             lastModified = lastModified,
             isHidden = isHidden,
             isNoMedia = isNoMedia,
+            size = size
         )
 
     companion object {

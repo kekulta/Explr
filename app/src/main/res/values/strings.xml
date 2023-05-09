@@ -3,4 +3,10 @@
     <string name="permissions_denied_error">Looks like you did not give permissions, without permissions application can\'t access files and work properly. Please give permissions to continue with the application</string>
     <string name="no_permissions_rationale">This application is a File Explorer, it needs permissions to access your files to work. Without this permission application can\'t perform any of its functions. To continue work with our application you need to grant this permission.</string>
     <string name="give_permissions_button">Grant permissions</string>
+    <string name="no_sort_title">NO SORT</string>
+    <string name="sort_by_name_title">Sort by name</string>
+    <string name="sort_by_creation_title">Sort by creation time</string>
+    <string name="sort_by_modified_title">Sort by modify time</string>
+    <string name="sort_by_size_title">Sort by size</string>
+    <string name="sort_by_type">Sort by file type</string>
 </resources>

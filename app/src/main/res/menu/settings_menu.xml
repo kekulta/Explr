@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/reverse_item"
+        android:checkable="true"
+        android:icon="@drawable/sort_icon_foreground"
+        android:title="Reverse items"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/hidden_item"
         android:checkable="true"
@@ -8,4 +15,8 @@
         android:id="@+id/nomedia_item"
         android:checkable="true"
         android:title="Show .nomedia files in the Categories" />
+    <item
+        android:id="@+id/sorting_item"
+        android:checkable="false"
+        android:title="Sort by..." />
 </menu>

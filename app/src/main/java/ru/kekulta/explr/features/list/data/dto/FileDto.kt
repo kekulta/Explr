@@ -42,6 +42,8 @@ class FileDto(
     var isHidden: Boolean,
     @ColumnInfo(name = IS_NOMEDIA)
     var isNoMedia: Boolean,
+    @ColumnInfo(name = SIZE)
+    var size: Double,
 ) {
 
 
@@ -57,5 +59,6 @@ class FileDto(
         const val LAST_MODIFIED = "file_last_modified"
         const val IS_HIDDEN = "file_is_hidden"
         const val IS_NOMEDIA = "file_nomedia"
+        const val SIZE = "file_size"
     }
 }

@@ -8,6 +8,7 @@ import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FileItemBinding
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.shared.utils.sizeInKb
 
 class FilesAdapter :
     ListAdapter<FileRepresentation, FilesAdapter.Holder>(FileRepresentation.DIFF_CALLBACK) {
@@ -22,8 +23,9 @@ class FilesAdapter :
             binding.root.setOnClickListener {
                 onClickListener?.invoke(file.path)
             }
+            //TODO reformat items
             binding.fileName.text =
-                "${file.name} isHidden:${file.isHidden} isNomedia: ${file.isNoMedia}"
+                "${file.name} size:${file.sizeInKb}Kb"
             binding.fileIcon.setImageResource(
                 when (file.type) {
                     FileType.DIRECTORY -> R.drawable.directory_icon

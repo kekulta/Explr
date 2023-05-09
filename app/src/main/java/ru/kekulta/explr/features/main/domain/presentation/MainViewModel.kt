@@ -6,13 +6,21 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
+import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.ui.FilesListFragment
+import ru.kekulta.explr.features.main.domain.models.MainEvent
+import ru.kekulta.explr.features.main.domain.models.MainState
 import ru.kekulta.explr.features.main.ui.PermissionsDeniedFragment
 import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
 import ru.kekulta.explr.shared.navigation.api.Command
@@ -20,11 +28,17 @@ import ru.kekulta.explr.shared.navigation.api.Navigator
 import ru.kekulta.explr.shared.navigation.api.Router
 
 
-class MainViewModel(private val router: Router, private val visibilityManager: VisibilityManager) :
+class MainViewModel(
+    private val router: Router,
+    private val visibilityManager: VisibilityManager,
+    private val sortingManager: SortingManager
+) :
     ViewModel() {
 
     private val _drawer = MutableLiveData<Int>(R.id.internal_storage)
     private val _state = MediatorLiveData(MainState(R.id.internal_storage, false, false))
+    private val eventChannel = Channel<MainEvent>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
     val state: LiveData<MainState> get() = _state
     var permissionsRequested: Boolean = false
     private var initialized = false
@@ -147,6 +161,16 @@ class MainViewModel(private val router: Router, private val visibilityManager: V
                 true
             }
 
+            R.id.sorting_item -> {
+                viewModelScope.launch { eventChannel.send(MainEvent.SHOW_SORT_MENU) }
+                true
+            }
+
+            R.id.reverse_item -> {
+                sortingManager.reversed = !sortingManager.reversed
+                true
+            }
+
             else -> false
         }
 
@@ -156,7 +180,8 @@ class MainViewModel(private val router: Router, private val visibilityManager: V
             initializer {
                 MainViewModel(
                     MainServiceLocator.provideRouter(),
-                    MainServiceLocator.provideVisibilityManager()
+                    MainServiceLocator.provideVisibilityManager(),
+                    MainServiceLocator.provideSortingManager(),
                 )
             }
         }

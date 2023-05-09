@@ -5,20 +5,25 @@ import android.os.Environment
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
+import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
+import ru.kekulta.explr.features.list.domain.models.SortType
 import ru.kekulta.explr.shared.utils.FileType
+import ru.kekulta.explr.shared.utils.extension
 import ru.kekulta.explr.shared.utils.shortToast
 import java.io.File
 
 class FilesInteractorImpl(
     private val repository: FilesRepository,
-    private val visibilityManager: VisibilityManager
+    private val visibilityManager: VisibilityManager,
+    private val sortingManager: SortingManager,
 ) : FilesInteractor {
     init {
         runBlocking {
@@ -35,7 +40,33 @@ class FilesInteractorImpl(
         }
     }
 
-    override fun observeContent(path: String): Flow<List<FileRepresentation>> = when {
+    private fun sortContent(
+        list: Flow<List<FileRepresentation>>,
+        sortType: SortType,
+        reversed: Boolean
+    ): Flow<List<FileRepresentation>> = when (sortType) {
+        SortType.NAME -> list.map { it.sortedBy { file -> file.name } }
+        SortType.NO_SORT -> list.map { it.sortedBy { file -> file.name } }
+        SortType.DATE_MODIFIED -> list.map { it.sortedBy { file -> file.lastModified } }
+        SortType.SIZE -> list.map { it.sortedBy { file -> file.size } }
+        SortType.TYPE -> list.map {
+            it.sortedWith(
+                compareBy(
+                    { file -> file.type },
+                    { file -> file.extension })
+            )
+        }
+    }.map { listSorted -> if (reversed) listSorted.reversed() else listSorted }
+
+
+    override fun observeContent(path: String): Flow<List<FileRepresentation>> =
+        sortingManager.observeSort { sortType, reversed ->
+            sortContent(
+                observeRawContent(path), sortType, reversed
+            )
+        }
+
+    private fun observeRawContent(path: String): Flow<List<FileRepresentation>> = when {
         path.startsWith(FilesInteractor.DOWNLOADS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeContent(
                 Environment.getExternalStorageDirectory().path + File.separator + DOWNLOADS_DIRECTORY,
@@ -112,8 +143,6 @@ class FilesInteractorImpl(
     private suspend fun recursiveUpdate(path: String, _isHidden: Boolean, _isNoMedia: Boolean) {
         val file = File(path)
         if (file.isDirectory) {
-
-            //Log.d(LOG_TAG, "updating: $path")
 
             val parent = repository.get(path)
 

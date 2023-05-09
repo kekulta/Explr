@@ -7,10 +7,17 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.ActivityMainBinding
+import ru.kekulta.explr.di.MainServiceLocator
+import ru.kekulta.explr.features.list.domain.models.SortType
 import ru.kekulta.explr.features.main.domain.MainNavigator
+import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
 
@@ -52,6 +59,30 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             binding.topAppBar.menu.apply {
                 findItem(R.id.hidden_item).isChecked = state.hidden
                 findItem(R.id.nomedia_item).isChecked = state.nomedia
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.eventsFlow.collect { event ->
+                when (event) {
+                    // TODO Locator in ui
+                    MainEvent.SHOW_SORT_MENU -> {
+
+                        val options =
+                            SortType.values().map { resources.getString(it.id) }.toTypedArray()
+                        val current = MainServiceLocator.provideSortingManager().type.ordinal
+
+                        //TODO hardcoded strings
+
+                        MaterialAlertDialogBuilder(this@MainActivity)
+                            .setTitle("Sort by...")
+                            .setSingleChoiceItems(options, current) { _, option ->
+                                MainServiceLocator.provideSortingManager().type =
+                                    SortType.values()[option]
+                            }
+                            .setNegativeButton("Close") { _, _ -> }
+                            .show()
+                    }
+                }
             }
         }
 

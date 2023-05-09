@@ -6,8 +6,10 @@ import ru.kekulta.explr.features.list.data.FilesRepositoryImpl
 import ru.kekulta.explr.features.list.data.database.AppDatabase
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
+import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
+import ru.kekulta.explr.features.list.domain.impl.SortingManagerImpl
 import ru.kekulta.explr.features.list.domain.impl.VisibilityManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
 import ru.kekulta.explr.shared.navigation.api.Router
@@ -22,12 +24,26 @@ object MainServiceLocator {
     private var filesRepository: FilesRepository? = null
     private var filesInteractor: FilesInteractor? = null
     private var visibilityManager: VisibilityManager? = null
+    private var sortingManager: SortingManager? = null
 
     fun provideFilesInteractor(): FilesInteractor {
         if (filesInteractor == null) {
-            filesInteractor = FilesInteractorImpl(provideFilesRepository(), provideVisibilityManager())
+            filesInteractor =
+                FilesInteractorImpl(
+                    provideFilesRepository(),
+                    provideVisibilityManager(),
+                    provideSortingManager(),
+                )
         }
         return filesInteractor!!
+    }
+
+    fun provideSortingManager(): SortingManager {
+        if (sortingManager == null) {
+            sortingManager = SortingManagerImpl()
+        }
+
+        return sortingManager!!
     }
 
     fun provideVisibilityManager(): VisibilityManager {

@@ -1,5 +1,6 @@
 package ru.kekulta.explr.shared.utils
 
+import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import java.io.File
 
 enum class FileType {
@@ -8,6 +9,16 @@ enum class FileType {
 
 val File.extension: String
     get() = name.substringAfterLast('.', "")
+
+val FileRepresentation.extension: String
+    get() = name.substringAfterLast('.', "")
+
+val File.size get() = if (!exists()) 0.0 else length().toDouble()
+val File.sizeInKb get() = size / 1024
+val File.sizeInMb get() = sizeInKb / 1024
+
+val FileRepresentation.sizeInKb get() = size / 1024
+val FileRepresentation.sizeInMb get() = sizeInKb / 1024
 
 val imageExtensions = setOf(
     "jpg",
