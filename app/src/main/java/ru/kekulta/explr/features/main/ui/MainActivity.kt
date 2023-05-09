@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 findItem(R.id.hidden_item).isChecked = state.filterState.showHidden
                 findItem(R.id.nomedia_item).isChecked = state.filterState.showNomedia
             }
-            (listOf(resources.getString(state.toolBarState.root.id)) + state.toolBarState.location.toList()).joinToString(
+            (listOf(resources.getString(state.toolBarState.root.root)) + state.toolBarState.location.toList()).joinToString(
                 separator = " -> "
             ).let { path ->
                 state.toolBarState.let { toolBarState ->

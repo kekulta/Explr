@@ -1,6 +1,6 @@
 <resources>
     <string name="permissions_denied_error">Похоже вы не выдали разрешения, без разрешений приложение не может получить доступ к файлам и корректно работать. Пожалуйста, выдайте разрешения для продолжения работы в приложении.</string>
-    <string name="no_permissions_rationale">Это приложение-проводник, ему необходимы разрешения на доступ к файлам для работы. Без разрешений приложение не может выполнять свои функции. Вам необходимо выдть разрешения, чтобы продолжить работать с приложением.</string>
+    <string name="no_permissions_rationale">Это приложение-проводник, ему необходимы разрешения на доступ к файлам для работы. Без разрешений приложение не может выполнять свои функции. Вам необходимо выдть разрешения, чтобы продолжить работу с приложением.</string>
     <string name="give_permissions_button">Выдать разрешения</string>
     <string name="no_sort_title">по умолчанию</string>
     <string name="sort_by_name_title">по имени</string>
@@ -38,4 +38,16 @@
     <string name="reverse_items_title">В обратном порядке</string>
     <string name="show_hidden_files_title">Показывать скрытые файлы</string>
     <string name="show_nomedia_files_title">Показывать .nomedia файлы в категориях</string>
+    <string name="details_title">Подробнее</string>
+    <string name="directory_type">Каталог</string>
+    <string name="file_type">Файл</string>
+    <string name="video_type">Видео</string>
+    <string name="image_type">Изображение</string>
+    <string name="audio_type">Аудио</string>
+    <string name="document_type">Документ</string>
+    <string name="filename_details_placeholder">Название файла: %1$s</string>
+    <string name="size_details_placeholder">Размер: %1$dКб</string>
+    <string name="last_modified_details_placeholder">Время изменения: %2$d %1$s</string>
+    <string name="mime_type_details_placeholder">MIME-тип: %1$s</string>
+    <string name="file_type_details_placeholder">Тип файла: %1$s</string>
 </resources>

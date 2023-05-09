@@ -60,6 +60,10 @@ class FilesListViewModel(
             is FileClickEvent.Share -> {
                 viewModelScope.launch { eventChannel.send(ListEvent.ShareFile(event.file.file)) }
             }
+
+            is FileClickEvent.Details -> {
+                viewModelScope.launch { eventChannel.send(ListEvent.DetailsFile(event.file)) }
+            }
         }
     }
 

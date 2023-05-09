@@ -39,4 +39,16 @@
     <string name="reverse_items_title">Reverse order</string>
     <string name="show_hidden_files_title">Show hidden files</string>
     <string name="show_nomedia_files_title">Show .nomedia files in the Categories</string>
+    <string name="details_title">Details</string>
+    <string name="directory_type">Directory</string>
+    <string name="file_type">File</string>
+    <string name="video_type">Video</string>
+    <string name="image_type">Image</string>
+    <string name="audio_type">Audio</string>
+    <string name="document_type">Document</string>
+    <string name="filename_details_placeholder">Filename: %1$s</string>
+    <string name="size_details_placeholder">Size: %1$dKb</string>
+    <string name="last_modified_details_placeholder">Last modified: %1$s %2$d</string>
+    <string name="mime_type_details_placeholder">MIME type: %1$s</string>
+    <string name="file_type_details_placeholder">File type: %1$s</string>
 </resources>

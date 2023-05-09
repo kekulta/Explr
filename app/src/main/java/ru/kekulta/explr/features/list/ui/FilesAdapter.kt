@@ -48,6 +48,11 @@ class FilesAdapter :
                                     true
                                 }
 
+                                R.id.details_item -> {
+                                    onEventListener?.invoke(FileClickEvent.Details(file))
+                                    true
+                                }
+
                                 else -> false
                             }
                         }

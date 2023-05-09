@@ -1,9 +1,13 @@
 package ru.kekulta.explr.shared.utils
 
+import android.content.Context
 import android.content.res.Resources
+import androidx.fragment.app.Fragment
 import ru.kekulta.explr.R
 import java.util.Calendar
 
+fun Context.getMonth(number: Int): String = resources.getMonth(number)
+fun Fragment.getMonth(number: Int): String = resources.getMonth(number)
 fun Resources.getMonth(number: Int): String = when (number) {
     0 -> getString(R.string.month_january)
     1 -> getString(R.string.month_february)

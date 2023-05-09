@@ -71,6 +71,11 @@ val FileRepresentation.sizeInMb get() = sizeInKb / 1024
 val FileRepresentation.file: File
     get() = File(path)
 
+fun FileRepresentation.mime(context: Context): String? {
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", this.file)
+    return context.contentResolver.getType(uri)
+}
+
 fun FileRepresentation.shareFile(context: Context) = this.file.shareFile(context)
 
 fun FileRepresentation.openFile(context: Context) = file.openFile(context)
