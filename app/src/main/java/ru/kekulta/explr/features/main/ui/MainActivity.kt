@@ -1,5 +1,6 @@
 package ru.kekulta.explr.features.main.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 findItem(R.id.hidden_item).isChecked = state.hidden
                 findItem(R.id.nomedia_item).isChecked = state.nomedia
             }
+            binding.pathTextview.text =
+                (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(
+                    separator = " -> "
+                )
         }
         lifecycleScope.launch {
             viewModel.eventsFlow.collect { event ->

@@ -11,6 +11,8 @@ import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.impl.SortingManagerImpl
 import ru.kekulta.explr.features.list.domain.impl.VisibilityManagerImpl
+import ru.kekulta.explr.features.main.domain.api.ToolBarManager
+import ru.kekulta.explr.features.main.domain.impl.ToolBarManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
 import ru.kekulta.explr.shared.navigation.api.Router
 
@@ -25,6 +27,7 @@ object MainServiceLocator {
     private var filesInteractor: FilesInteractor? = null
     private var visibilityManager: VisibilityManager? = null
     private var sortingManager: SortingManager? = null
+    private var toolBarManager: ToolBarManager? = null
 
     fun provideFilesInteractor(): FilesInteractor {
         if (filesInteractor == null) {
@@ -36,6 +39,13 @@ object MainServiceLocator {
                 )
         }
         return filesInteractor!!
+    }
+
+    fun provideToolBarManager(): ToolBarManager {
+        if (toolBarManager == null) {
+            toolBarManager = ToolBarManagerImpl()
+        }
+        return toolBarManager!!
     }
 
     fun provideSortingManager(): SortingManager {

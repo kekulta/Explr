@@ -16,4 +16,5 @@
     <string name="internal_storage">Internal Storage</string>
     <string name="downloads_root">Downloads</string>
     <string name="recent_root">Recent</string>
+    <string name="no_root">Undefined</string>
 </resources>

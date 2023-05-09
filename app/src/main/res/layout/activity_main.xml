@@ -32,6 +32,18 @@
                     app:menu="@menu/settings_menu"
                     app:navigationIcon="@drawable/menu_icon" />
 
+                <HorizontalScrollView
+                    android:id="@+id/path_scrollview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/path_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </HorizontalScrollView>
+
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView

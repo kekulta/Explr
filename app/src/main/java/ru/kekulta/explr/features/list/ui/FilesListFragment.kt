@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
+import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
+import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
 import java.io.File
 
@@ -61,8 +63,6 @@ class FilesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.locationTextview.text =
-//            location?.joinToString(separator = " -> ") ?: "No such file or directory"
         path?.let {
             lifecycleScope.launch {
                 viewModel.subscribe(it).collect { list ->
@@ -77,6 +77,8 @@ class FilesListFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext())
             }
         }
+
+        viewModel.onResume(ToolBarState(root ?: R.string.no_root, location ?: arrayOf()))
     }
 
     companion object {

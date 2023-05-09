@@ -20,8 +20,10 @@ import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
 import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.ui.FilesListFragment
+import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.models.MainState
+import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.features.main.ui.PermissionsDeniedFragment
 import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
 import ru.kekulta.explr.shared.navigation.api.Command
@@ -32,12 +34,14 @@ import ru.kekulta.explr.shared.navigation.api.Router
 class MainViewModel(
     private val router: Router,
     private val visibilityManager: VisibilityManager,
-    private val sortingManager: SortingManager
+    private val sortingManager: SortingManager,
+    toolBarManager: ToolBarManager,
 ) :
     ViewModel() {
 
     private val _drawer = MutableLiveData<Int>(R.id.internal_storage)
-    private val _state = MediatorLiveData(MainState(R.id.internal_storage, false, false))
+    private val _state =
+        MediatorLiveData(MainState(R.id.internal_storage, false, false, ToolBarState()))
     private val eventChannel = Channel<MainEvent>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
     val state: LiveData<MainState> get() = _state
@@ -53,6 +57,9 @@ class MainViewModel(
         }
         _state.addSource(visibilityManager.getNomediaStatus().asLiveData()) { nomedia ->
             _state.value = _state.value!!.copy(nomedia = nomedia)
+        }
+        _state.addSource(toolBarManager.getCurrentToolBarStateFlow().asLiveData()) { toolBarState ->
+            _state.value = _state.value!!.copy(toolBarState = toolBarState)
         }
     }
 
@@ -182,6 +189,7 @@ class MainViewModel(
                     MainServiceLocator.provideRouter(),
                     MainServiceLocator.provideVisibilityManager(),
                     MainServiceLocator.provideSortingManager(),
+                    MainServiceLocator.provideToolBarManager(),
                 )
             }
         }
