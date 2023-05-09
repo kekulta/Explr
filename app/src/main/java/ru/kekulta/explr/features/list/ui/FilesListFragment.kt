@@ -23,6 +23,7 @@ import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.models.FileClickEvent
 import ru.kekulta.explr.features.list.domain.models.FilesListState
+import ru.kekulta.explr.features.list.domain.models.ListEvent
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
@@ -67,6 +68,20 @@ class FilesListFragment : Fragment() {
                 }
             }
 
+            lifecycleScope.launch {
+                viewModel.eventsFlow.collect { event ->
+                    when (event) {
+                        is ListEvent.OpenFile -> {
+                            event.file.openFile(requireContext())
+                        }
+
+                        is ListEvent.ShareFile -> {
+                            event.file.shareFile(requireContext())
+                        }
+                    }
+                }
+            }
+
 
             binding.filesRecycler.apply {
                 adapter = filesAdapter.apply {
@@ -74,7 +89,6 @@ class FilesListFragment : Fragment() {
                 }
                 layoutManager = LinearLayoutManager(requireContext())
             }
-
         }
 
         viewModel.onResume(state)

@@ -1,11 +1,14 @@
 package ru.kekulta.explr.features.list.domain.presentation
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
@@ -15,8 +18,10 @@ import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.models.FileClickEvent
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.FilesListState
+import ru.kekulta.explr.features.list.domain.models.ListEvent
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
+import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.utils.deleteRecursively
@@ -32,6 +37,8 @@ class FilesListViewModel(
 ) :
     ViewModel() {
     private var state: FilesListState? = null
+    private val eventChannel = Channel<ListEvent>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
     fun fileEvent(event: FileClickEvent) {
         when (event) {
@@ -41,7 +48,7 @@ class FilesListViewModel(
                         if (file.isDirectory) {
                             navigateTo(file)
                         } else {
-                            fileUtil.openFile(file)
+                            viewModelScope.launch { eventChannel.send(ListEvent.OpenFile(file)) }
                         }
                     }
                 }
@@ -55,7 +62,7 @@ class FilesListViewModel(
             }
 
             is FileClickEvent.Share -> {
-                fileUtil.shareFile(event.file.file)
+                viewModelScope.launch { eventChannel.send(ListEvent.ShareFile(event.file.file)) }
             }
         }
     }

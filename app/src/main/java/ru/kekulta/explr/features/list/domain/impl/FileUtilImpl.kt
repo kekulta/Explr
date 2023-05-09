@@ -27,15 +27,6 @@ class FileUtilImpl(private val context: Context) : FileUtil {
             }
         }
 
-
-    override fun openFile(file: File) {
-        file.openFile(context)
-    }
-
-    override fun shareFile(file: File) {
-        file.shareFile(context)
-    }
-
     companion object {
         const val LOG_TAG = "TypeCheckerImpl"
     }
