@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
         viewModel.state.observe(this) { state ->
-            binding.navigationView.menu.findItem(state.drawerItem).isChecked = true
+            binding.navigationView.menu.findItem(state.category.id).isChecked = true
             binding.topAppBar.menu.apply {
-                findItem(R.id.hidden_item).isChecked = state.hidden
-                findItem(R.id.nomedia_item).isChecked = state.nomedia
+                findItem(R.id.hidden_item).isChecked = state.filterState.showHidden
+                findItem(R.id.nomedia_item).isChecked = state.filterState.showNomedia
             }
             binding.pathTextview.text =
                 (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(

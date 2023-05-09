@@ -7,10 +7,10 @@ import ru.kekulta.explr.features.list.data.database.AppDatabase
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
 import ru.kekulta.explr.features.list.domain.api.SortingManager
-import ru.kekulta.explr.features.list.domain.api.VisibilityManager
+import ru.kekulta.explr.features.list.domain.api.FilterManager
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.impl.SortingManagerImpl
-import ru.kekulta.explr.features.list.domain.impl.VisibilityManagerImpl
+import ru.kekulta.explr.features.list.domain.impl.FilterManagerImpl
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.impl.ToolBarManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
@@ -25,7 +25,7 @@ object MainServiceLocator {
     private var router: Router? = null
     private var filesRepository: FilesRepository? = null
     private var filesInteractor: FilesInteractor? = null
-    private var visibilityManager: VisibilityManager? = null
+    private var filterManager: FilterManager? = null
     private var sortingManager: SortingManager? = null
     private var toolBarManager: ToolBarManager? = null
 
@@ -34,7 +34,7 @@ object MainServiceLocator {
             filesInteractor =
                 FilesInteractorImpl(
                     provideFilesRepository(),
-                    provideVisibilityManager(),
+                    provideFilterManager(),
                     provideSortingManager(),
                 )
         }
@@ -56,11 +56,11 @@ object MainServiceLocator {
         return sortingManager!!
     }
 
-    fun provideVisibilityManager(): VisibilityManager {
-        if (visibilityManager == null) {
-            visibilityManager = VisibilityManagerImpl()
+    fun provideFilterManager(): FilterManager {
+        if (filterManager == null) {
+            filterManager = FilterManagerImpl()
         }
-        return visibilityManager!!
+        return filterManager!!
     }
 
     private fun provideFilesRepository(): FilesRepository {

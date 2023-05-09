@@ -1,3 +1,6 @@
 package ru.kekulta.explr.features.main.domain.models
 
-data class MainState(val drawerItem: Int, val hidden: Boolean, val nomedia: Boolean, val toolBarState: ToolBarState)
+import ru.kekulta.explr.features.list.domain.models.Category
+import ru.kekulta.explr.features.list.domain.models.FilterState
+
+data class MainState(val category: Category, val filterState: FilterState, val toolBarState: ToolBarState)
