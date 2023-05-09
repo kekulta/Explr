@@ -5,18 +5,18 @@
         android:id="@+id/reverse_item"
         android:checkable="true"
         android:icon="@drawable/sort_icon_foreground"
-        android:title="Reverse items"
+        android:title="@string/reverse_items_title"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/hidden_item"
         android:checkable="true"
-        android:title="Show hidden files" />
+        android:title="@string/show_hidden_files_title" />
     <item
         android:id="@+id/nomedia_item"
         android:checkable="true"
-        android:title="Show .nomedia files in the Categories" />
+        android:title="@string/show_nomedia_files_title" />
     <item
         android:id="@+id/sorting_item"
         android:checkable="false"
-        android:title="Sort by..." />
+        android:title="@string/sort_by_title" />
 </menu>

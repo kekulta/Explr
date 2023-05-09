@@ -2,9 +2,10 @@ package ru.kekulta.explr.features.main.domain.models
 
 import androidx.annotation.StringRes
 import ru.kekulta.explr.R
+import ru.kekulta.explr.features.list.domain.models.Category
 
 data class ToolBarState(
-    @StringRes val root: Int = R.string.internal_storage,
+    val root: Category = Category.STORAGE,
     val location: Array<String> = arrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
@@ -20,8 +21,9 @@ data class ToolBarState(
     }
 
     override fun hashCode(): Int {
-        var result = root
+        var result = root.hashCode()
         result = 31 * result + location.contentHashCode()
         return result
     }
+
 }

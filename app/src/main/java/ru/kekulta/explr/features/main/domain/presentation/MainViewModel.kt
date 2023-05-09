@@ -39,11 +39,10 @@ class MainViewModel(
 ) :
     ViewModel() {
 
-    private val _category = MutableLiveData(Category.STORAGE)
+
     private val _state =
         MediatorLiveData(
             MainState(
-                category = Category.STORAGE,
                 filterState = FilterState(),
                 toolBarState = ToolBarState()
             )
@@ -55,9 +54,6 @@ class MainViewModel(
     private var initialized = false
 
     init {
-        _state.addSource(_category) { category ->
-            _state.value = _state.value!!.copy(category = category)
-        }
         _state.addSource(filterManager.getFilterStateFlow().asLiveData()) { filterState ->
             _state.value = _state.value!!.copy(filterState = filterState)
         }
@@ -106,37 +102,30 @@ class MainViewModel(
     fun drawerClicked(itemId: Int): Boolean {
         when (itemId) {
             R.id.internal_storage -> {
-                _category.value = Category.STORAGE
                 router.navigateToList(Category.STORAGE)
             }
 
             R.id.audio_item -> {
-                _category.value = Category.AUDIO
                 router.navigateToList(Category.AUDIO)
             }
 
             R.id.image_item -> {
-                _category.value = Category.IMAGES
                 router.navigateToList(Category.IMAGES)
             }
 
             R.id.documents_item -> {
-                _category.value = Category.DOCUMENTS
                 router.navigateToList(Category.DOCUMENTS)
             }
 
             R.id.videos_item -> {
-                _category.value = Category.VIDEOS
                 router.navigateToList(Category.VIDEOS)
             }
 
             R.id.downloads_item -> {
-                _category.value = Category.DOWNLOADS
                 router.navigateToList(Category.DOWNLOADS)
             }
 
             R.id.recent_item -> {
-                _category.value = Category.RECENT
                 router.navigateToList(Category.RECENT)
             }
         }
@@ -150,7 +139,7 @@ class MainViewModel(
                 Bundle().apply {
                     putParcelable(
                         FilesListFragment.STATE_KEY,
-                        FilesListState(category.path, category.root)
+                        FilesListState(category.path, category)
                     )
                 }
             )

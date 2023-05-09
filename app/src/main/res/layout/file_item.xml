@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/file_icon" />
+        android:src="@drawable/file_icon"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -43,7 +44,7 @@
                 android:layout_margin="2dp"
                 android:text="147Kb"
                 android:textColor="?colorOnSurfaceVariant"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/file_last_modified"
@@ -52,7 +53,7 @@
                 android:layout_margin="2dp"
                 android:text="May 7"
                 android:textColor="?colorOnSurfaceVariant"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -13,6 +13,7 @@ import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.FileUtil
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
+import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.domain.models.FileClickEvent
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.FilesListState
@@ -73,7 +74,7 @@ class FilesListViewModel(
     fun onResume(state: FilesListState?) {
         this.state = state
         toolBarManager.toolBarState = ToolBarState(
-            state?.root ?: R.string.no_root,
+            state?.root ?: Category.STORAGE,
             state?.location ?: arrayOf()
         )
     }

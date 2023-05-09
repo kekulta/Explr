@@ -56,18 +56,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
         viewModel.state.observe(this) { state ->
-            binding.navigationView.menu.findItem(state.category.id).isChecked = true
             binding.topAppBar.menu.apply {
                 findItem(R.id.hidden_item).isChecked = state.filterState.showHidden
                 findItem(R.id.nomedia_item).isChecked = state.filterState.showNomedia
             }
-            (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(
+            (listOf(resources.getString(state.toolBarState.root.id)) + state.toolBarState.location.toList()).joinToString(
                 separator = " -> "
             ).let { path ->
                 state.toolBarState.let { toolBarState ->
+                    binding.navigationView.menu.findItem(toolBarState.root.id).isChecked = true
+
                     if (toolBarState.location.isEmpty()) {
                         binding.pathTextview.text = ""
-                        binding.topAppBar.title = getString(toolBarState.root)
+                        binding.topAppBar.title = getString(toolBarState.root.root)
                     } else {
                         if (binding.pathTextview.text != path) {
                             binding.pathTextview.text = path

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FilesListState(
     val path: String = Category.STORAGE.path,
-    val root: Int = Category.STORAGE.root,
+    val root: Category = Category.STORAGE,
     val location: Array<String> = arrayOf()
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
@@ -24,7 +24,7 @@ data class FilesListState(
 
     override fun hashCode(): Int {
         var result = path.hashCode()
-        result = 31 * result + root
+        result = 31 * result + root.hashCode()
         result = 31 * result + location.contentHashCode()
         return result
     }
