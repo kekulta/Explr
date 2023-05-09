@@ -20,10 +20,12 @@ import ru.kekulta.explr.App
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
+import ru.kekulta.explr.features.list.domain.models.FileClickEvent
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.utils.openFile
+import ru.kekulta.explr.shared.utils.shareFile
 import java.io.File
 
 
@@ -35,25 +37,41 @@ class FilesListFragment : Fragment() {
     private var root: Int? = null
     private var location: Array<String>? = null
     private val filesAdapter = FilesAdapter().apply {
-        onClickListener = { path ->
-            File(path).let { file ->
-                if (file.exists()) {
-                    if (file.isDirectory) {
-                        MainServiceLocator.provideRouter().navigate(
-                            //TODO Fix navigation
-                            Command.ForwardTo(
-                                DESTINATION_KEY, bundleOf(
-                                    PATH_KEY to path,
-                                    ROOT_KEY to root,
-                                    LOCATION_KEY to ((location ?: arrayOf()) + File(path).name),
+        onEventListener = { event ->
+            when (event) {
+                is FileClickEvent.Click -> {
+                    File(event.file.path).let { file ->
+                        if (file.exists()) {
+                            if (file.isDirectory) {
+                                MainServiceLocator.provideRouter().navigate(
+                                    //TODO Fix navigation
+                                    Command.ForwardTo(
+                                        DESTINATION_KEY, bundleOf(
+                                            PATH_KEY to file.path,
+                                            ROOT_KEY to root,
+                                            LOCATION_KEY to ((location ?: arrayOf()) + file.name),
+                                        )
+                                    )
                                 )
-                            )
-                        )
-                    } else {
-                        file.openFile(requireContext())
+                            } else {
+                                file.openFile(requireContext())
+                            }
+                        }
                     }
                 }
+
+                is FileClickEvent.Delete -> {
+                    lifecycleScope.launch {
+                        File(event.file.path).deleteRecursively()
+
+                    }
+                }
+
+                is FileClickEvent.Share -> {
+                    event.file.shareFile(requireContext())
+                }
             }
+
 
         }
     }

@@ -148,10 +148,29 @@ val File.type: FileType
         }
     }
 
+fun FileRepresentation.shareFile(context: Context) {
+    val file = File(path)
+
+    //TODO change authority
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
+    val mime: String? = when (file.type) {
+        FileType.IMAGE -> "image/*"
+        FileType.VIDEO -> "video/*"
+        FileType.AUDIO -> "audio/*"
+        else -> context.contentResolver.getType(uri)
+    }
+
+    val intent = Intent()
+    intent.action = Intent.ACTION_SEND
+    intent.setDataAndType(uri, mime)
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(intent)
+}
+
 fun File.openFile(context: Context) {
     val file = File(path)
 
-    //TODO change authriry
+    //TODO change authority
     val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
     val mime: String? = when (file.type) {
         FileType.IMAGE -> "image/*"
