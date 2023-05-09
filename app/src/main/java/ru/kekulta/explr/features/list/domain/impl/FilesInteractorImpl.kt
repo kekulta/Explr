@@ -13,6 +13,7 @@ import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
 import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
+import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.SortType
 import ru.kekulta.explr.shared.utils.FileType
@@ -68,7 +69,7 @@ class FilesInteractorImpl(
         }
 
     private fun observeRawContent(path: String): Flow<List<FileRepresentation>> = when {
-        path.startsWith(FilesInteractor.DOWNLOADS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.DOWNLOADS.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeContent(
                 Environment.getExternalStorageDirectory().path + File.separator + DOWNLOADS_DIRECTORY,
                 hidden,
@@ -76,14 +77,14 @@ class FilesInteractorImpl(
             )
         }
 
-        path.startsWith(FilesInteractor.RECENT_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.RECENT.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeRecent(
                 hidden,
                 nomedia
             )
         }
 
-        path.startsWith(FilesInteractor.AUDIO_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.AUDIO.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeType(
                 FileType.AUDIO,
                 hidden,
@@ -91,7 +92,7 @@ class FilesInteractorImpl(
             )
         }
 
-        path.startsWith(FilesInteractor.VIDEOS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.VIDEOS.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeType(
                 FileType.VIDEO,
                 hidden,
@@ -99,7 +100,7 @@ class FilesInteractorImpl(
             )
         }
 
-        path.startsWith(FilesInteractor.DOCUMENTS_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.DOCUMENTS.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeType(
                 FileType.DOCUMENT,
                 hidden,
@@ -107,7 +108,7 @@ class FilesInteractorImpl(
             )
         }
 
-        path.startsWith(FilesInteractor.IMAGES_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
+        path.startsWith(Category.IMAGES.path) -> visibilityManager.observeHiddenNomedia { hidden, nomedia ->
             repository.observeType(
                 FileType.IMAGE,
                 hidden,
@@ -115,10 +116,10 @@ class FilesInteractorImpl(
             )
         }
 
-        path.startsWith(FilesInteractor.STORAGE_CATEGORY) -> visibilityManager.observeHiddenNomedia { hidden, _ ->
+        path.startsWith(Category.STORAGE.path) -> visibilityManager.observeHiddenNomedia { hidden, _ ->
             repository.observeContent(
                 path.replace(
-                    FilesInteractor.STORAGE_CATEGORY,
+                    Category.STORAGE.path,
                     Environment.getExternalStorageDirectory().path
                 ), hidden, true
             )

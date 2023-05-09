@@ -18,6 +18,7 @@ import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.VisibilityManager
+import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.models.MainState
@@ -60,8 +61,7 @@ class MainViewModel(
         if (!initialized) {
             initialized = true
 
-
-            router.navigateToList(FilesInteractor.STORAGE_CATEGORY, "InternalStorage")
+            router.navigateToList(Category.STORAGE)
         }
     }
 
@@ -97,53 +97,53 @@ class MainViewModel(
         when (itemId) {
             R.id.internal_storage -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.STORAGE_CATEGORY, "Internal Storage")
+                router.navigateToList(Category.STORAGE)
             }
 
             R.id.audio_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.AUDIO_CATEGORY, "Audio")
+                router.navigateToList(Category.AUDIO)
             }
 
             R.id.image_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.IMAGES_CATEGORY, "Images")
+                router.navigateToList(Category.IMAGES)
             }
 
             R.id.documents_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.DOCUMENTS_CATEGORY, "Documents")
+                router.navigateToList(Category.DOCUMENTS)
             }
 
             R.id.videos_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.VIDEOS_CATEGORY, "Video")
+                router.navigateToList(Category.VIDEOS)
             }
 
             R.id.downloads_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.DOWNLOADS_CATEGORY, "Downloads")
+                router.navigateToList(Category.DOWNLOADS)
             }
 
             R.id.recent_item -> {
                 _drawer.value = itemId
-                router.navigateToList(FilesInteractor.RECENT_CATEGORY, "Recent")
+                router.navigateToList(Category.DOCUMENTS)
             }
         }
         return true
     }
 
     //TODO change extension
-    private fun Router.navigateToList(path: String, location: String) {
+    private fun Router.navigateToList(category: Category) {
         this.navigate(
             Command.ForwardTo(
                 FilesListFragment.DESTINATION_KEY,
                 Bundle().apply {
                     putString(
                         FilesListFragment.PATH_KEY,
-                        path
+                        category.path
                     )
-                    putStringArray(FilesListFragment.LOCATION_KEY, arrayOf(location))
+                    putInt(FilesListFragment.ROOT_KEY, category.text)
                 }
             )
         )

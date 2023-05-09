@@ -24,6 +24,7 @@ class FilesListFragment : Fragment() {
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: FilesListViewModel by viewModels({ requireActivity() }) { FilesListViewModel.Factory }
     private var path: String? = null
+    private var root: Int? = null
     private var location: Array<String>? = null
     private val filesAdapter = FilesAdapter().apply {
         onClickListener = { path ->
@@ -32,6 +33,7 @@ class FilesListFragment : Fragment() {
                 Command.ForwardTo(
                     DESTINATION_KEY, bundleOf(
                         PATH_KEY to path,
+                        ROOT_KEY to root,
                         LOCATION_KEY to ((location ?: arrayOf()) + File(path).name),
                     )
                 )
@@ -43,6 +45,7 @@ class FilesListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         path = arguments?.getString(PATH_KEY)
         location = arguments?.getStringArray(LOCATION_KEY)
+        root = arguments?.getInt(ROOT_KEY)
         Log.d(LOG_TAG, "onCreate: $path")
 
     }
@@ -78,6 +81,7 @@ class FilesListFragment : Fragment() {
 
     companion object {
         const val INTERNAL_STORAGE = "Internal Storage"
+        const val ROOT_KEY = "FilesRootKey"
         const val PATH_KEY = "FilesPathKey"
         const val LOCATION_KEY = "FilesLocationKey"
         const val LOG_TAG = "ListFragment"

@@ -9,4 +9,11 @@
     <string name="sort_by_modified_title">Sort by modify time</string>
     <string name="sort_by_size_title">Sort by size</string>
     <string name="sort_by_type">Sort by file type</string>
+    <string name="videos_root">Videos</string>
+    <string name="audio_root">Audio</string>
+    <string name="documents_root">Documents</string>
+    <string name="images_root">Images</string>
+    <string name="internal_storage">Internal Storage</string>
+    <string name="downloads_root">Downloads</string>
+    <string name="recent_root">Recent</string>
 </resources>
