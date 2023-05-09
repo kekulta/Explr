@@ -8,9 +8,11 @@ import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
 import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.FilterManager
+import ru.kekulta.explr.features.list.domain.api.TypeChecker
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.impl.SortingManagerImpl
 import ru.kekulta.explr.features.list.domain.impl.FilterManagerImpl
+import ru.kekulta.explr.features.list.domain.impl.TypeCheckerImpl
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
 import ru.kekulta.explr.features.main.domain.impl.ToolBarManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
@@ -28,6 +30,13 @@ object MainServiceLocator {
     private var filterManager: FilterManager? = null
     private var sortingManager: SortingManager? = null
     private var toolBarManager: ToolBarManager? = null
+    private var typeChecker: TypeChecker? = null
+    fun provideTypeChecker(): TypeChecker {
+        if (typeChecker == null) {
+            typeChecker = TypeCheckerImpl(context)
+        }
+        return typeChecker!!
+    }
 
     fun provideFilesInteractor(): FilesInteractor {
         if (filesInteractor == null) {
@@ -36,6 +45,7 @@ object MainServiceLocator {
                     provideFilesRepository(),
                     provideFilterManager(),
                     provideSortingManager(),
+                    provideTypeChecker(),
                 )
         }
         return filesInteractor!!

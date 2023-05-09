@@ -10,18 +10,21 @@ import ru.kekulta.explr.features.list.domain.api.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.FilesRepository
 import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.FilterManager
+import ru.kekulta.explr.features.list.domain.api.TypeChecker
 import ru.kekulta.explr.features.list.domain.models.Category
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.SortType
 import ru.kekulta.explr.shared.utils.FileType
 import ru.kekulta.explr.shared.utils.extension
 import ru.kekulta.explr.shared.utils.size
+import ru.kekulta.explr.shared.utils.type
 import java.io.File
 
 class FilesInteractorImpl(
     private val repository: FilesRepository,
     private val filterManager: FilterManager,
     private val sortingManager: SortingManager,
+    private val typeChecker: TypeChecker,
 ) : FilesInteractor {
     init {
         runBlocking {
@@ -32,6 +35,7 @@ class FilesInteractorImpl(
                         level = 0,
                         isHidden = false,
                         isNoMedia = false,
+                        type = FileType.DIRECTORY
                     ).copy(parent = null)
                 )
             }
@@ -168,7 +172,8 @@ class FilesInteractorImpl(
                             file = it,
                             level = parent.level + 1,
                             isHidden = it.isHidden || isHidden,
-                            isNoMedia = isNoMedia
+                            isNoMedia = isNoMedia,
+                            type = typeChecker.getType(it),
                         )
                     }
                 val filesSet = files.map { it.path }.toSet()

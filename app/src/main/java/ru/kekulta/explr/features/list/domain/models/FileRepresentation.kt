@@ -4,8 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import ru.kekulta.explr.features.list.data.dto.FileDto
 import ru.kekulta.explr.shared.utils.FileType
 import ru.kekulta.explr.shared.utils.size
-import ru.kekulta.explr.shared.utils.sizeInKb
-import ru.kekulta.explr.shared.utils.type
+
 import java.io.File
 
 data class FileRepresentation(
@@ -35,14 +34,14 @@ data class FileRepresentation(
         size = file.size
     )
 
-    constructor(file: File, level: Int, isHidden: Boolean, isNoMedia: Boolean) : this(
+    constructor(file: File, level: Int, isHidden: Boolean, isNoMedia: Boolean, type: FileType) : this(
         path = file.path,
         name = file.name,
         isDirectory = file.isDirectory,
         hashcode = file.hashCode(),
         parent = file.parent,
         level = level,
-        type = file.type,
+        type = type,
         lastModified = file.lastModified(),
         isHidden = isHidden,
         isNoMedia = isNoMedia,
