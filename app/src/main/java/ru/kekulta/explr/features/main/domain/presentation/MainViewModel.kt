@@ -17,6 +17,7 @@ import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.api.SortingManager
 import ru.kekulta.explr.features.list.domain.api.FilterManager
 import ru.kekulta.explr.features.list.domain.models.Category
+import ru.kekulta.explr.features.list.domain.models.FilesListState
 import ru.kekulta.explr.features.list.domain.models.FilterState
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
@@ -148,11 +149,10 @@ class MainViewModel(
             Command.ForwardTo(
                 FilesListFragment.DESTINATION_KEY,
                 Bundle().apply {
-                    putString(
-                        FilesListFragment.PATH_KEY,
-                        category.path
+                    putParcelable(
+                        FilesListFragment.STATE_KEY,
+                        FilesListState(category.path, category.root)
                     )
-                    putInt(FilesListFragment.ROOT_KEY, category.text)
                 }
             )
         )

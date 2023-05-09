@@ -1,6 +1,7 @@
 package ru.kekulta.explr.features.list.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.models.FileClickEvent
+import ru.kekulta.explr.features.list.domain.models.FilesListState
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
@@ -33,9 +35,7 @@ class FilesListFragment : Fragment() {
 
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: FilesListViewModel by viewModels({ requireActivity() }) { FilesListViewModel.Factory }
-    private var path: String? = null
-    private var root: Int? = null
-    private var location: Array<String>? = null
+    private var state: FilesListState? = null
     private val filesAdapter = FilesAdapter().apply {
         onEventListener = { event ->
             when (event) {
@@ -47,9 +47,12 @@ class FilesListFragment : Fragment() {
                                     //TODO Fix navigation
                                     Command.ForwardTo(
                                         DESTINATION_KEY, bundleOf(
-                                            PATH_KEY to file.path,
-                                            ROOT_KEY to root,
-                                            LOCATION_KEY to ((location ?: arrayOf()) + file.name),
+                                            STATE_KEY to state?.let {
+                                                it.copy(
+                                                    location = it.location + file.name,
+                                                    path = event.file.path
+                                                )
+                                            }
                                         )
                                     )
                                 )
@@ -78,10 +81,12 @@ class FilesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        path = arguments?.getString(PATH_KEY)
-        location = arguments?.getStringArray(LOCATION_KEY)
-        root = arguments?.getInt(ROOT_KEY)
-        Log.d(LOG_TAG, "onCreate: $path")
+        state = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(STATE_KEY, FilesListState::class.java)
+        } else {
+            arguments?.getParcelable(STATE_KEY)
+        }
+        Log.d(LOG_TAG, "onCreate: ${state?.path}")
 
     }
 
@@ -90,13 +95,13 @@ class FilesListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(LOG_TAG, "onCreateView: $path")
+        Log.d(LOG_TAG, "onCreateView: ${state?.path}")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        path?.let {
+        state?.path?.let {
             lifecycleScope.launch {
                 viewModel.subscribe(it).collect { list ->
                     filesAdapter.submitList(list)
@@ -111,14 +116,16 @@ class FilesListFragment : Fragment() {
             }
         }
 
-        viewModel.onResume(ToolBarState(root ?: R.string.no_root, location ?: arrayOf()))
+        viewModel.onResume(
+            ToolBarState(
+                state?.root ?: R.string.no_root,
+                state?.location ?: arrayOf()
+            )
+        )
     }
 
     companion object {
-        const val INTERNAL_STORAGE = "Internal Storage"
-        const val ROOT_KEY = "FilesRootKey"
-        const val PATH_KEY = "FilesPathKey"
-        const val LOCATION_KEY = "FilesLocationKey"
+        const val STATE_KEY = "FilesStateKey"
         const val LOG_TAG = "ListFragment"
         const val DESTINATION_KEY = "ListFragmentKey"
     }
