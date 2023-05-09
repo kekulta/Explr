@@ -1,5 +1,8 @@
 package ru.kekulta.explr.shared.utils
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.FileProvider
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import java.io.File
 
@@ -46,6 +49,8 @@ val imageExtensions = setOf(
 )
 
 val videosExtensions = setOf(
+    "mov",
+    "mp4",
     "webm",
     "mkv",
     "flv",
@@ -126,7 +131,6 @@ val audioExtensions = setOf(
     "wav",
     "wma",
     "wv",
-    "webm",
     "8svx",
     "cda"
 )
@@ -143,3 +147,31 @@ val File.type: FileType
             else -> FileType.FILE
         }
     }
+
+fun FileRepresentation.openFile(context: Context) {
+    val file = File(path)
+
+    //TODO change authriry
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
+    val mime: String? = context.contentResolver.getType(uri)
+
+    val intent = Intent()
+    intent.action = Intent.ACTION_VIEW
+    intent.setDataAndType(uri, mime)
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(intent)
+}
+
+fun File.openFile(context: Context) {
+    val file = File(path)
+
+    //TODO change authriry
+    val uri = FileProvider.getUriForFile(context, "ru.kekulta.fileprovider", file)
+    val mime: String? = context.contentResolver.getType(uri)
+
+    val intent = Intent()
+    intent.action = Intent.ACTION_VIEW
+    intent.setDataAndType(uri, mime)
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(intent)
+}

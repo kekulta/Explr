@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,8 @@ import ru.kekulta.explr.features.main.domain.MainNavigator
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
+import ru.kekulta.explr.shared.utils.hideScrollBar
+import ru.kekulta.explr.shared.utils.scrollToBottom
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -42,6 +45,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         )
 
+        binding.pathScrollview.hideScrollBar()
+
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             viewModel.settingsClicked(menuItem.itemId)
         }
@@ -61,10 +66,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 findItem(R.id.hidden_item).isChecked = state.filterState.showHidden
                 findItem(R.id.nomedia_item).isChecked = state.filterState.showNomedia
             }
-            binding.pathTextview.text =
-                (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(
-                    separator = " -> "
-                )
+            (listOf(resources.getString(state.toolBarState.root)) + state.toolBarState.location.toList()).joinToString(
+                separator = " -> "
+            ).let { path ->
+                if (binding.pathTextview.text != path) {
+                    binding.pathTextview.text = path
+                    binding.pathScrollview.let { scroll ->
+                        scroll.post { scroll.scrollToBottom() }
+                    }
+                }
+            }
         }
         lifecycleScope.launch {
             viewModel.eventsFlow.collect { event ->

@@ -136,7 +136,7 @@ class MainViewModel(
 
             R.id.recent_item -> {
                 _category.value = Category.RECENT
-                router.navigateToList(Category.DOCUMENTS)
+                router.navigateToList(Category.RECENT)
             }
         }
         return true

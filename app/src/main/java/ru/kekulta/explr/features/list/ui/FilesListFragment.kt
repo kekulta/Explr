@@ -1,10 +1,13 @@
 package ru.kekulta.explr.features.list.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
+import androidx.core.content.FileProvider.getUriForFile
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,13 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
+import ru.kekulta.explr.App
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FragmentListBinding
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
+import ru.kekulta.explr.shared.utils.openFile
 import java.io.File
+
 
 class FilesListFragment : Fragment() {
 
@@ -30,16 +36,25 @@ class FilesListFragment : Fragment() {
     private var location: Array<String>? = null
     private val filesAdapter = FilesAdapter().apply {
         onClickListener = { path ->
-            MainServiceLocator.provideRouter().navigate(
-                //TODO Fix navigation
-                Command.ForwardTo(
-                    DESTINATION_KEY, bundleOf(
-                        PATH_KEY to path,
-                        ROOT_KEY to root,
-                        LOCATION_KEY to ((location ?: arrayOf()) + File(path).name),
-                    )
-                )
-            )
+            File(path).let { file ->
+                if (file.exists()) {
+                    if (file.isDirectory) {
+                        MainServiceLocator.provideRouter().navigate(
+                            //TODO Fix navigation
+                            Command.ForwardTo(
+                                DESTINATION_KEY, bundleOf(
+                                    PATH_KEY to path,
+                                    ROOT_KEY to root,
+                                    LOCATION_KEY to ((location ?: arrayOf()) + File(path).name),
+                                )
+                            )
+                        )
+                    } else {
+                        file.openFile(requireContext())
+                    }
+                }
+            }
+
         }
     }
 
