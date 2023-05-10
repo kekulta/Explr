@@ -19,12 +19,14 @@ import ru.kekulta.explr.features.list.domain.models.states.FilesListState
 import ru.kekulta.explr.features.list.domain.models.events.ListEvent
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
+import ru.kekulta.explr.features.main.domain.models.LocationItem
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.utils.deleteRecursively
 import ru.kekulta.explr.shared.utils.file
 import ru.kekulta.explr.shared.utils.requireParent
 import java.io.File
+import kotlin.random.Random
 
 class FilesListViewModel(
     private val filesInteractor: FilesInteractor,
@@ -34,7 +36,7 @@ class FilesListViewModel(
     private var state: FilesListState? = null
     private val eventChannel = Channel<ListEvent>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
-
+    val random = Random(System.currentTimeMillis())
     fun fileEvent(event: FileClickEvent) {
         when (event) {
             is FileClickEvent.Click -> {
@@ -81,16 +83,18 @@ class FilesListViewModel(
     }
 
     private fun navigateTo(file: File) {
-        MainServiceLocator.provideRouter().navigate(
-            Command.ForwardTo(
-                FilesListFragment.DESTINATION_KEY,
-                bundleOf(FilesListFragment.STATE_KEY to state?.let {
-                    it.copy(
-                        location = it.location + file.name, path = file.path
-                    )
-                })
+        random.nextInt().let { id ->
+            MainServiceLocator.provideRouter().navigate(
+                Command.ForwardTo(
+                    FilesListFragment.DESTINATION_KEY,
+                    bundleOf(FilesListFragment.STATE_KEY to state?.let {
+                        it.copy(
+                            location = it.location + LocationItem(file.name, id), path = file.path
+                        )
+                    }), id
+                )
             )
-        )
+        }
     }
 
 

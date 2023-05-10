@@ -2,7 +2,7 @@ package ru.kekulta.explr.features.list.domain.models.enums
 
 import ru.kekulta.explr.R
 
-enum class Category(val id: Int, val root: Int, val path: String) {
+enum class Category(val textId: Int, val root: Int, val path: String) {
     VIDEOS(R.id.videos_item, R.string.videos_root, "VIDEOS::"),
     AUDIO(R.id.audio_item, R.string.audio_root, "AUDIO::"),
     DOCUMENTS(R.id.documents_item, R.string.documents_root, "DOCUMENTS::"),

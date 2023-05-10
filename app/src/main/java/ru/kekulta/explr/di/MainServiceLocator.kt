@@ -17,7 +17,9 @@ import ru.kekulta.explr.features.list.domain.impl.FileUtilImpl
 import ru.kekulta.explr.features.list.domain.impl.FilesInteractorImpl
 import ru.kekulta.explr.features.list.domain.impl.FilterManagerImpl
 import ru.kekulta.explr.features.list.domain.impl.SortingManagerImpl
+import ru.kekulta.explr.features.main.domain.api.ResourcesManager
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
+import ru.kekulta.explr.features.main.domain.impl.ResourcesManagerImpl
 import ru.kekulta.explr.features.main.domain.impl.ToolBarManagerImpl
 import ru.kekulta.explr.shared.navigation.AppRouter
 import ru.kekulta.explr.shared.navigation.api.Router
@@ -37,12 +39,20 @@ object MainServiceLocator {
     private var fileUtil: FileUtil? = null
     private var hashedInteractor: HashedInteractor? = null
     private var hashedRepository: HashedRepository? = null
+    private var resourcesManager: ResourcesManager? = null
 
     fun provideFileUtil(): FileUtil {
         if (fileUtil == null) {
             fileUtil = FileUtilImpl(context)
         }
         return fileUtil!!
+    }
+
+    fun provideResourcesManager(): ResourcesManager {
+        if (resourcesManager == null) {
+            resourcesManager = ResourcesManagerImpl(context.resources)
+        }
+        return resourcesManager!!
     }
 
     fun provideHashedInteractor(): HashedInteractor {

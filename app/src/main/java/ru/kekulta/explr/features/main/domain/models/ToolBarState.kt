@@ -4,7 +4,7 @@ import ru.kekulta.explr.features.list.domain.models.enums.Category
 
 data class ToolBarState(
     val root: Category = Category.STORAGE,
-    val location: Array<String> = arrayOf(),
+    val location: Array<LocationItem> = arrayOf(),
     val isSortingAvailable: Boolean = true,
 ) {
     override fun equals(other: Any?): Boolean {

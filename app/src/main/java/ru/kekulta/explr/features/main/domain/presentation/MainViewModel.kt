@@ -2,6 +2,7 @@ package ru.kekulta.explr.features.main.domain.presentation
 
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,9 @@ import ru.kekulta.explr.features.list.domain.models.enums.Category
 import ru.kekulta.explr.features.list.domain.models.states.FilesListState
 import ru.kekulta.explr.features.list.domain.models.states.FilterState
 import ru.kekulta.explr.features.list.ui.FilesListFragment
+import ru.kekulta.explr.features.main.domain.api.ResourcesManager
 import ru.kekulta.explr.features.main.domain.api.ToolBarManager
+import ru.kekulta.explr.features.main.domain.models.LocationItem
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.models.MainState
 import ru.kekulta.explr.features.main.domain.models.ToolBarState
@@ -33,6 +36,7 @@ import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.navigation.api.Navigator
 import ru.kekulta.explr.shared.navigation.api.Router
 import ru.kekulta.explr.shared.navigation.models.Backstack
+import kotlin.random.Random
 
 
 class MainViewModel(
@@ -42,17 +46,15 @@ class MainViewModel(
     private val toolBarManager: ToolBarManager,
     private val hashedInteractor: HashedInteractor,
     private val filesInteractor: FilesInteractor,
-) :
-    ViewModel() {
+    private val resourcesManager: ResourcesManager,
+) : ViewModel() {
 
-
-    private val _state =
-        MediatorLiveData(
-            MainState(
-                filterState = FilterState(),
-                toolBarState = ToolBarState()
-            )
+    private val random = Random(System.currentTimeMillis())
+    private val _state = MediatorLiveData(
+        MainState(
+            filterState = FilterState(), toolBarState = ToolBarState()
         )
+    )
     private var backstack = Backstack()
     private val eventChannel = Channel<MainEvent>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -94,8 +96,6 @@ class MainViewModel(
         backstack = router.detachNavigator()
     }
 
-    // TODO fix permission navigation
-
     fun permissionsDenied() {
         router.navigate(
             Command.ReplaceTo(
@@ -117,7 +117,11 @@ class MainViewModel(
     }
 
     fun noPermissions() {
-        router.navigate(Command.ForwardTo(PermissionsRequestFragment.DESTINATION_KEY))
+        router.navigate(
+            Command.ForwardTo(
+                PermissionsRequestFragment.DESTINATION_KEY
+            )
+        )
     }
 
     fun drawerClicked(itemId: Int): Boolean {
@@ -166,45 +170,49 @@ class MainViewModel(
     }
 
     private fun Router.navigateToList(category: Category) {
-        this.navigate(
-            Command.ForwardTo(
-                FilesListFragment.DESTINATION_KEY,
-                Bundle().apply {
-                    putParcelable(
-                        FilesListFragment.STATE_KEY,
-                        FilesListState(category.path, category)
+        random.nextInt().let { id ->
+            this.navigate(Command.ForwardTo(FilesListFragment.DESTINATION_KEY, Bundle().apply {
+                putParcelable(
+                    FilesListFragment.STATE_KEY, FilesListState(
+                        category.path, category, arrayOf(
+                            LocationItem(resourcesManager.getString(category.root), id)
+                        )
                     )
-                }
-            )
-        )
+                )
+            }, id))
+        }
     }
 
-    fun settingsClicked(itemId: Int): Boolean =
-        when (itemId) {
-            R.id.hidden_item -> {
-                filterManager.filterState =
-                    filterManager.filterState.copy(showHidden = !filterManager.filterState.showHidden)
-                true
-            }
-
-            R.id.nomedia_item -> {
-                filterManager.filterState =
-                    filterManager.filterState.copy(showNomedia = !filterManager.filterState.showNomedia)
-                true
-            }
-
-            R.id.sorting_item -> {
-                viewModelScope.launch { eventChannel.send(MainEvent.ShowSortMenu(sortingManager.type)) }
-                true
-            }
-
-            R.id.reverse_item -> {
-                sortingManager.reversed = !sortingManager.reversed
-                true
-            }
-
-            else -> false
+    fun settingsClicked(itemId: Int): Boolean = when (itemId) {
+        R.id.hidden_item -> {
+            filterManager.filterState =
+                filterManager.filterState.copy(showHidden = !filterManager.filterState.showHidden)
+            true
         }
+
+        R.id.nomedia_item -> {
+            filterManager.filterState =
+                filterManager.filterState.copy(showNomedia = !filterManager.filterState.showNomedia)
+            true
+        }
+
+        R.id.sorting_item -> {
+            viewModelScope.launch { eventChannel.send(MainEvent.ShowSortMenu(sortingManager.type)) }
+            true
+        }
+
+        R.id.reverse_item -> {
+            sortingManager.reversed = !sortingManager.reversed
+            true
+        }
+
+        else -> false
+    }
+
+    fun onLocationClicked(location: LocationItem) {
+        Log.d(LOG_TAG, "location clicked: $location")
+        router.navigate(Command.ReturnTo(location.id))
+    }
 
     companion object {
         const val LOG_TAG = "MainViewModel"
@@ -218,6 +226,7 @@ class MainViewModel(
                         provideToolBarManager(),
                         provideHashedInteractor(),
                         provideFilesInteractor(),
+                        provideResourcesManager(),
                     )
                 }
             }

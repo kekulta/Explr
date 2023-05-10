@@ -5,9 +5,7 @@ import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,6 +19,7 @@ import ru.kekulta.explr.features.main.domain.models.LocationItem
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
+import ru.kekulta.explr.shared.utils.contentEquals
 import ru.kekulta.explr.shared.utils.gone
 import ru.kekulta.explr.shared.utils.visible
 
@@ -29,7 +28,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
-    private val locationAdapter = LocationAdapter()
+    private val locationAdapter by lazy {
+        LocationAdapter().apply {
+            onClickListener = viewModel::onLocationClicked
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,14 +74,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
             state.toolBarState.let { toolBarState ->
-                binding.navigationView.menu.findItem(toolBarState.root.id).isChecked = true
+                binding.navigationView.menu.findItem(toolBarState.root.textId).isChecked = true
 
                 binding.topAppBar.menu.apply {
                     findItem(R.id.sorting_item).isVisible = toolBarState.isSortingAvailable
                     findItem(R.id.reverse_item).isVisible = toolBarState.isSortingAvailable
                 }
-                state.toolBarState.location.toList().map { LocationItem(it) }.let { list ->
-                    if (locationAdapter.itemCount != list.size) {
+                state.toolBarState.location.toList().let { list ->
+                    if (locationAdapter.itemCount != list.size || !locationAdapter.currentList.contentEquals(
+                            list
+                        )
+                    ) {
                         locationAdapter.submitList(list)
                         onLocationChanged()
                     }
@@ -89,7 +95,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     binding.topAppBar.title = getString(toolBarState.root.root)
                 } else {
                     binding.locationRecycler.visible()
-                    binding.topAppBar.title = toolBarState.location.last()
+                    binding.topAppBar.title = toolBarState.location.last().text
                 }
             }
 

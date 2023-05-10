@@ -18,6 +18,7 @@ import ru.kekulta.explr.shared.navigation.models.Backstack
 import ru.kekulta.explr.shared.navigation.models.Destination
 import ru.kekulta.explr.shared.navigation.models.Transaction
 import ru.kekulta.explr.shared.navigation.models.addToBackStack
+import ru.kekulta.explr.shared.navigation.models.dropAfter
 import ru.kekulta.explr.shared.navigation.models.lastDestination
 import ru.kekulta.explr.shared.navigation.models.popBackStack
 import java.lang.ref.WeakReference
@@ -48,7 +49,7 @@ class MainNavigator(
                             ).also {
                                 back = backstack.addToBackStack(
                                     Transaction(
-                                        random.nextInt(),
+                                        command.id,
                                         command.destination,
                                         WeakReference(it)
                                     )
@@ -95,6 +96,29 @@ class MainNavigator(
                     Backstack()
                 } else {
                     backstack.popBackStack().apply {
+                        fragmentManager.commit {
+                            setReorderingAllowed(true)
+                            setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                            replace(
+                                container,
+                                stack.last().cache.get() ?: provideFragment(
+                                    lastDestination!!.destinationKey,
+                                    lastDestination!!.args
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            is Command.ReturnTo -> {
+                val index = backstack.stack.indexOfFirst { it.id == command.id }
+                Log.d(LOG_TAG, "$index")
+                if (index == -1) {
+                    backstack
+                } else {
+                    backstack.dropAfter(index).apply {
+                        Log.d(LOG_TAG, "new stack: $stack")
                         fragmentManager.commit {
                             setReorderingAllowed(true)
                             setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)

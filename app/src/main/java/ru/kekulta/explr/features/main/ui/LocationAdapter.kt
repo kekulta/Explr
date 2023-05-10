@@ -15,12 +15,17 @@ import ru.kekulta.explr.shared.utils.visible
 
 class LocationAdapter :
     ListAdapter<LocationItem, LocationAdapter.Holder>(LocationItem.DIFF_CALLBACK) {
-
+    var onClickListener: ((LocationItem) -> Unit)? = null
 
     inner class Holder(private val binding: LocationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(location: LocationItem, position: Int) {
+        fun onBind(location: LocationItem) {
+
+            binding.root.setOnClickListener {
+                onClickListener?.invoke(location)
+            }
+
             binding.locationItem.text = location.text
         }
     }
@@ -32,7 +37,7 @@ class LocationAdapter :
     )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.onBind(getItem(position), position)
+        holder.onBind(getItem(position))
     }
 
     companion object {

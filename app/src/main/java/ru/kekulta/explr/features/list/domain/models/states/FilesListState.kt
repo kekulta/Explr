@@ -3,12 +3,13 @@ package ru.kekulta.explr.features.list.domain.models.states
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import ru.kekulta.explr.features.list.domain.models.enums.Category
+import ru.kekulta.explr.features.main.domain.models.LocationItem
 
 @Parcelize
 data class FilesListState(
     val path: String = Category.STORAGE.path,
     val root: Category = Category.STORAGE,
-    val location: Array<String> = arrayOf()
+    val location: Array<LocationItem> = arrayOf()
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -29,4 +30,5 @@ data class FilesListState(
         result = 31 * result + location.contentHashCode()
         return result
     }
+
 }
