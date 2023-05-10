@@ -10,4 +10,5 @@ enum class Category(val id: Int, val root: Int, val path: String) {
     STORAGE(R.id.internal_storage, R.string.internal_storage_root, "STORAGE::"),
     DOWNLOADS(R.id.downloads_item, R.string.downloads_root, "DOWNLOADS::"),
     RECENT(R.id.recent_item, R.string.recent_root, "RECENT::"),
+    DIFFS(R.id.diffs_storage, R.string.diffs_root, "DIFFS::")
 }

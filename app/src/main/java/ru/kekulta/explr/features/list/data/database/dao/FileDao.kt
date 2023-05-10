@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import ru.kekulta.explr.features.list.data.dto.FileDto
+import ru.kekulta.explr.features.list.data.database.dto.FileDto
 import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 @Dao
@@ -81,6 +81,10 @@ interface FileDao {
     )
     fun observeRecent(from: Long, hidden: Boolean, nomedia: Boolean): Flow<List<FileDto>>
 
-    @Query("UPDATE ${FileDto.TABLE} SET ${FileDto.SIZE} = :size WHERE ${FileDto.PATH}=:path")
+    @Query("""
+        UPDATE ${FileDto.TABLE}
+        SET ${FileDto.SIZE} = :size 
+        WHERE ${FileDto.PATH}=:path
+        """)
     fun updateSize(path: String, size: Double)
 }

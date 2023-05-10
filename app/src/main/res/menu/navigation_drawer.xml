@@ -38,5 +38,10 @@
             android:checkable="true"
             android:icon="@drawable/directory_icon"
             android:title="@string/internal_storage_root" />
+        <item
+            android:id="@+id/diffs_storage"
+            android:checkable="true"
+            android:icon="@drawable/directory_icon"
+            android:title="@string/changes_in_files" />
     </group>
 </menu>

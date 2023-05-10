@@ -39,6 +39,6 @@ class PermissionsDeniedFragment : Fragment(R.layout.fragment_permissions_denied)
 
     companion object {
         const val LOG_TAG = "PermissionsDeniedFragment"
-        const val KEY = "PermissionsDeniedFragmentKey"
+        const val DESTINATION_KEY = "PermissionsDeniedFragmentKey"
     }
 }

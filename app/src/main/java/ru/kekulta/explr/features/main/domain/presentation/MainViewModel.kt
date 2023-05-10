@@ -1,6 +1,7 @@
 package ru.kekulta.explr.features.main.domain.presentation
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
+import ru.kekulta.explr.features.difflist.domain.api.usecases.HashedInteractor
+import ru.kekulta.explr.features.difflist.ui.HashedListFragment
 import ru.kekulta.explr.features.list.domain.api.usecases.FilterManager
 import ru.kekulta.explr.features.list.domain.api.usecases.SortingManager
 import ru.kekulta.explr.features.list.domain.models.enums.Category
@@ -34,7 +37,8 @@ class MainViewModel(
     private val router: Router,
     private val filterManager: FilterManager,
     private val sortingManager: SortingManager,
-    toolBarManager: ToolBarManager,
+    private val toolBarManager: ToolBarManager,
+    private val hashedInteractor: HashedInteractor,
 ) :
     ViewModel() {
 
@@ -65,7 +69,9 @@ class MainViewModel(
         router.attachNavigator(navigator)
         if (!initialized) {
             initialized = true
-
+            viewModelScope.launch {
+                hashedInteractor.updateStart()
+            }
             router.navigateToList(Category.STORAGE)
         }
     }
@@ -83,25 +89,32 @@ class MainViewModel(
     fun permissionsDenied() {
         router.navigate(
             Command.ReplaceTo(
-                destination = PermissionsDeniedFragment.KEY
+                destination = PermissionsDeniedFragment.DESTINATION_KEY
             )
         )
     }
 
     fun permissionsGranted() {
+        viewModelScope.launch {
+            hashedInteractor.updateStart()
+        }
         router.navigate(
             Command.Back
         )
     }
 
     fun noPermissions() {
-        router.navigate(Command.ForwardTo(PermissionsRequestFragment.KEY))
+        router.navigate(Command.ForwardTo(PermissionsRequestFragment.DESTINATION_KEY))
     }
 
     fun drawerClicked(itemId: Int): Boolean {
         when (itemId) {
             R.id.internal_storage -> {
                 router.navigateToList(Category.STORAGE)
+            }
+
+            R.id.diffs_storage -> {
+                router.navigateToDiff()
             }
 
             R.id.audio_item -> {
@@ -129,6 +142,14 @@ class MainViewModel(
             }
         }
         return true
+    }
+
+    private fun Router.navigateToDiff() {
+        this.navigate(
+            Command.ForwardTo(
+                HashedListFragment.DESTINATION_KEY,
+            )
+        )
     }
 
     private fun Router.navigateToList(category: Category) {
@@ -176,12 +197,15 @@ class MainViewModel(
         const val LOG_TAG = "MainViewModel"
         val Factory = viewModelFactory {
             initializer {
-                MainViewModel(
-                    MainServiceLocator.provideRouter(),
-                    MainServiceLocator.provideFilterManager(),
-                    MainServiceLocator.provideSortingManager(),
-                    MainServiceLocator.provideToolBarManager(),
-                )
+                MainServiceLocator.run {
+                    MainViewModel(
+                        provideRouter(),
+                        provideFilterManager(),
+                        provideSortingManager(),
+                        provideToolBarManager(),
+                        provideHashedInteractor(),
+                    )
+                }
             }
         }
     }

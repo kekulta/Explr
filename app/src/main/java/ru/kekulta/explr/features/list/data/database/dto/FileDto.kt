@@ -1,13 +1,13 @@
-package ru.kekulta.explr.features.list.data.dto
+package ru.kekulta.explr.features.list.data.database.dto
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
-import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.PARENT
-import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.PATH
-import ru.kekulta.explr.features.list.data.dto.FileDto.Companion.TABLE
+import ru.kekulta.explr.features.list.data.database.dto.FileDto.Companion.PARENT
+import ru.kekulta.explr.features.list.data.database.dto.FileDto.Companion.PATH
+import ru.kekulta.explr.features.list.data.database.dto.FileDto.Companion.TABLE
 import ru.kekulta.explr.features.list.domain.models.enums.FileType
 
 @Entity(

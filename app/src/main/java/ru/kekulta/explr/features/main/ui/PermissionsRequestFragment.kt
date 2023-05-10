@@ -41,6 +41,6 @@ class PermissionsRequestFragment : Fragment(R.layout.fragment_permissions_reques
 
     companion object {
         const val LOG_TAG = "PermissionsRequestFragment"
-        const val KEY = "PermissionsRequestFragmentKey"
+        const val DESTINATION_KEY = "PermissionsRequestFragmentKey"
     }
 }

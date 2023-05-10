@@ -30,8 +30,7 @@ class FilesListViewModel(
     private val filesInteractor: FilesInteractor,
     private val toolBarManager: ToolBarManager,
     private val fileUtil: FileUtil,
-) :
-    ViewModel() {
+) : ViewModel() {
     private var state: FilesListState? = null
     private val eventChannel = Channel<ListEvent>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -77,22 +76,19 @@ class FilesListViewModel(
     fun onResume(state: FilesListState?) {
         this.state = state
         toolBarManager.toolBarState = ToolBarState(
-            state?.root ?: Category.STORAGE,
-            state?.location ?: arrayOf()
+            state?.root ?: Category.STORAGE, state?.location ?: arrayOf()
         )
     }
 
     private fun navigateTo(file: File) {
         MainServiceLocator.provideRouter().navigate(
             Command.ForwardTo(
-                FilesListFragment.DESTINATION_KEY, bundleOf(
-                    FilesListFragment.STATE_KEY to state?.let {
-                        it.copy(
-                            location = it.location + file.name,
-                            path = file.path
-                        )
-                    }
-                )
+                FilesListFragment.DESTINATION_KEY,
+                bundleOf(FilesListFragment.STATE_KEY to state?.let {
+                    it.copy(
+                        location = it.location + file.name, path = file.path
+                    )
+                })
             )
         )
     }
@@ -102,11 +98,13 @@ class FilesListViewModel(
         const val LOG_TAG = "FilesListViewModel"
         val Factory = viewModelFactory {
             initializer {
-                FilesListViewModel(
-                    MainServiceLocator.provideFilesInteractor(),
-                    MainServiceLocator.provideToolBarManager(),
-                    MainServiceLocator.provideFileUtil(),
-                )
+                MainServiceLocator.run {
+                    FilesListViewModel(
+                        provideFilesInteractor(),
+                        provideToolBarManager(),
+                        provideFileUtil(),
+                    )
+                }
             }
         }
     }

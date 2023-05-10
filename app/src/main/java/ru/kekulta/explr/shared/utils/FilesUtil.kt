@@ -3,15 +3,22 @@ package ru.kekulta.explr.shared.utils
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import android.text.TextUtils
+import android.util.Log
 import androidx.core.content.FileProvider
 import ru.kekulta.explr.features.list.domain.models.FileRepresentation
 import ru.kekulta.explr.features.list.domain.models.enums.FileType
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+
 
 val File.extension: String
-    get() = name.substringAfterLast('.', "")
-
-val FileRepresentation.extension: String
     get() = name.substringAfterLast('.', "")
 
 val File.size get() = if (!exists()) 0.0 else length().toDouble()
@@ -64,6 +71,11 @@ fun File.openFile(context: Context) {
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     context.startActivity(intent)
 }
+
+
+
+val FileRepresentation.extension: String
+    get() = name.substringAfterLast('.', "")
 
 val FileRepresentation.sizeInKb get() = size / 1024
 val FileRepresentation.sizeInMb get() = sizeInKb / 1024

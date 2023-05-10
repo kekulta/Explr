@@ -1,7 +1,7 @@
 package ru.kekulta.explr.features.list.domain.models
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.kekulta.explr.features.list.data.dto.FileDto
+import ru.kekulta.explr.features.list.data.database.dto.FileDto
 import ru.kekulta.explr.features.list.domain.models.enums.FileType
 import ru.kekulta.explr.shared.utils.size
 

@@ -6,6 +6,7 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import ru.kekulta.explr.features.difflist.ui.HashedListFragment
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.ui.PermissionsDeniedFragment
 import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
@@ -25,21 +26,21 @@ class MainNavigator(
     ) {
         when (command) {
             is Command.ForwardTo -> {
-                    fragmentManager.commit {
-                        setReorderingAllowed(true)
-                        replace(container, provideFragment(command.destination, command.args))
-                        addToBackStack(null)
-                    }
+                fragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace(container, provideFragment(command.destination, command.args))
+                    addToBackStack(null)
+                }
             }
 
             is Command.ReplaceTo -> {
 
-                    fragmentManager.popBackStack()
-                    fragmentManager.commit {
-                        setReorderingAllowed(true)
-                        replace(container, provideFragment(command.destination, command.args))
-                        addToBackStack(null)
-                    }
+                fragmentManager.popBackStack()
+                fragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace(container, provideFragment(command.destination, command.args))
+                    addToBackStack(null)
+                }
 
             }
 
@@ -54,16 +55,22 @@ class MainNavigator(
 
     private fun provideFragment(destination: String, args: Bundle?): Fragment {
         return when (destination) {
-            PermissionsRequestFragment.KEY -> PermissionsRequestFragment().apply {
+            PermissionsRequestFragment.DESTINATION_KEY -> PermissionsRequestFragment().apply {
                 arguments = args
             }
 
-            PermissionsDeniedFragment.KEY -> PermissionsDeniedFragment().apply {
+            PermissionsDeniedFragment.DESTINATION_KEY -> PermissionsDeniedFragment().apply {
                 arguments = args
             }
+
             FilesListFragment.DESTINATION_KEY -> FilesListFragment().apply {
                 arguments = args
             }
+
+            HashedListFragment.DESTINATION_KEY -> HashedListFragment().apply {
+                arguments = args
+            }
+
             else -> throw IllegalArgumentException("Invalid screen")
         }
     }
