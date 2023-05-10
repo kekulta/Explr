@@ -38,7 +38,8 @@ class HashedListViewModel(
 
     fun onViewCreated() {
         toolBarManager.toolBarState = ToolBarState(
-            root = Category.DIFFS
+            root = Category.DIFFS,
+            isSortingAvailable = false,
         )
     }
 

@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.9'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
 
     implementation 'androidx.room:room-runtime:2.5.1'

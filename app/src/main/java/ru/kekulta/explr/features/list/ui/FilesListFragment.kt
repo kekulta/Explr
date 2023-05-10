@@ -24,6 +24,7 @@ import ru.kekulta.explr.features.list.domain.models.events.ListEvent
 import ru.kekulta.explr.features.list.domain.presentation.FilesListViewModel
 import ru.kekulta.explr.shared.utils.dayOfMonth
 import ru.kekulta.explr.shared.utils.getMonth
+import ru.kekulta.explr.shared.utils.getParcelableSafe
 import ru.kekulta.explr.shared.utils.mime
 import ru.kekulta.explr.shared.utils.month
 import ru.kekulta.explr.shared.utils.openFile
@@ -40,11 +41,7 @@ class FilesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        state = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(STATE_KEY, FilesListState::class.java)
-        } else {
-            arguments?.getParcelable(STATE_KEY)
-        }
+        state = arguments?.getParcelableSafe(STATE_KEY, FilesListState::class.java)
         Log.d(LOG_TAG, "onCreate: ${state?.path}")
 
     }

@@ -47,7 +47,11 @@ object MainServiceLocator {
 
     fun provideHashedInteractor(): HashedInteractor {
         if (hashedInteractor == null) {
-            hashedInteractor = HashedInteractorImpl(provideHashedRepository(), provideFileUtil())
+            hashedInteractor = HashedInteractorImpl(
+                provideHashedRepository(),
+                provideFileUtil(),
+                provideFilterManager(),
+            )
         }
         return hashedInteractor!!
     }

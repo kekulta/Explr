@@ -55,4 +55,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="changes_in_files">Changes in files</string>
     <string name="diffs_root">Changes</string>
+    <string name="new_files_title">New</string>
+    <string name="old_files_title">Old</string>
+    <string name="changed_files_title">Changed</string>
+    <string name="deleted_files_title">Deleted</string>
+    <string name="processing_files_title">Processing</string>
+    <string name="undefined">Undefined</string>
 </resources>

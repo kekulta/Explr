@@ -163,7 +163,7 @@ class FilesInteractorImpl(
             if (file.exists() && parent != null) {
                 val filesDb = repository.getContent(path)
                 val isNoMedia =
-                    _isNoMedia || (file.listFiles() ?: arrayOf()).any { it.name == NOMEDIA }
+                    _isNoMedia || (file.listFiles() ?: arrayOf()).any { it.name == FileUtil.NOMEDIA }
                 val isHidden = _isHidden || file.isHidden
                 val files =
                     (file.listFiles() ?: arrayOf()).map {
@@ -197,6 +197,6 @@ class FilesInteractorImpl(
     companion object {
         const val LOG_TAG = "FilesInteractorImpl"
         private const val DOWNLOADS_DIRECTORY = "Download"
-        private const val NOMEDIA = ".nomedia"
+
     }
 }

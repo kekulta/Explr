@@ -17,8 +17,10 @@ import ru.kekulta.explr.features.main.domain.MainNavigator
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
+import ru.kekulta.explr.shared.utils.gone
 import ru.kekulta.explr.shared.utils.hideScrollBar
 import ru.kekulta.explr.shared.utils.scrollToBottom
+import ru.kekulta.explr.shared.utils.visible
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -66,10 +68,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 state.toolBarState.let { toolBarState ->
                     binding.navigationView.menu.findItem(toolBarState.root.id).isChecked = true
 
+                    binding.topAppBar.menu.apply {
+                        findItem(R.id.sorting_item).isVisible = toolBarState.isSortingAvailable
+                        findItem(R.id.reverse_item).isVisible = toolBarState.isSortingAvailable
+                    }
+
                     if (toolBarState.location.isEmpty()) {
+                        binding.pathTextview.gone()
                         binding.pathTextview.text = ""
                         binding.topAppBar.title = getString(toolBarState.root.root)
                     } else {
+                        binding.pathTextview.visible()
                         if (binding.pathTextview.text != path) {
                             binding.pathTextview.text = path
                             binding.pathScrollview.let { scroll ->

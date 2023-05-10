@@ -5,4 +5,8 @@ import java.io.File
 
 interface FileUtil {
     fun getType(file: File): FileType
+
+    companion object {
+        const val NOMEDIA = ".nomedia"
+    }
 }

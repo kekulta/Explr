@@ -20,6 +20,10 @@ class HashedDto(
     val hash: String?,
     @ColumnInfo(name = CHANGE_TYPE)
     val changeType: ChangeType,
+    @ColumnInfo(name = HIDDEN)
+    val hidden: Boolean,
+    @ColumnInfo(name = NOMEDIA)
+    val nomedia: Boolean,
 ) {
     companion object {
         const val TABLE = "hashed_table"
@@ -28,5 +32,7 @@ class HashedDto(
         const val TYPE = "hashed_type"
         const val HASH = "hashed_hash"
         const val CHANGE_TYPE = "hashed_change_type"
+        const val HIDDEN = "hashed_hidden"
+        const val NOMEDIA = "hashed_nomedia"
     }
 }
