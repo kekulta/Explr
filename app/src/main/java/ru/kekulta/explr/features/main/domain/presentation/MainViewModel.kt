@@ -69,15 +69,18 @@ class MainViewModel(
         }
     }
 
+    fun onCreate() {
+        viewModelScope.launch {
+            filesInteractor.update(Environment.getExternalStorageDirectory().path)
+        }
+    }
+
     fun onResume(navigator: Navigator) {
         router.attachNavigator(navigator, backstack)
         if (!initialized) {
             initialized = true
             viewModelScope.launch {
                 hashedInteractor.updateStart()
-            }
-            viewModelScope.launch {
-                filesInteractor.update(Environment.getExternalStorageDirectory().path)
             }
             router.navigateToList(Category.STORAGE)
         }

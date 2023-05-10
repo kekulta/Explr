@@ -14,16 +14,19 @@ import kotlinx.coroutines.launch
 import ru.kekulta.explr.R
 import ru.kekulta.explr.databinding.FragmentHashedListBinding
 import ru.kekulta.explr.databinding.FragmentHashedListPageBinding
+import ru.kekulta.explr.features.difflist.domain.models.HashedFile
 import ru.kekulta.explr.features.difflist.domain.models.enums.ChangeType
 import ru.kekulta.explr.features.difflist.domain.presentation.HashedListViewModel
 import ru.kekulta.explr.shared.utils.getParcelableSafe
 import ru.kekulta.explr.shared.utils.getSerializableSafe
+import ru.kekulta.explr.shared.utils.openFile
+import java.io.File
 
 class HashedListPageFragment : Fragment() {
     private val binding: FragmentHashedListPageBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: HashedListViewModel by viewModels({ requireActivity() }) { HashedListViewModel.Factory }
     private var type: ChangeType? = null
-    private val recyclerAdapter = HashedListRecyclerAdapter()
+    private val recyclerAdapter = HashedListRecyclerAdapter().apply { onClickListener = ::onClick }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         type = arguments?.getSerializableSafe(TYPE_KEY, ChangeType::class.java)
@@ -50,6 +53,16 @@ class HashedListPageFragment : Fragment() {
                     ChangeType.DELETED -> state.deletedFiles
                     else -> null
                 }?.let { list -> recyclerAdapter.submitList(list) }
+            }
+        }
+    }
+
+    private fun onClick(file: HashedFile) {
+        if (file.changeType != ChangeType.DELETED) {
+            File(file.path).apply {
+                if (exists()) {
+                    openFile(requireContext())
+                }
             }
         }
     }

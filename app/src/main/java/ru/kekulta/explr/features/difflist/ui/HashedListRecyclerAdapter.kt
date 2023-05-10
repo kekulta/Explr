@@ -23,11 +23,13 @@ import ru.kekulta.explr.shared.utils.visible
 
 class HashedListRecyclerAdapter :
     ListAdapter<HashedFile, HashedListRecyclerAdapter.Holder>(HashedFile.DIFF_CALLBACK) {
-
+    var onClickListener: ((HashedFile) -> Unit)? = null
     inner class Holder(private val binding: ChangedFileItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(file: HashedFile) {
+
+            binding.root.setOnClickListener { onClickListener?.invoke(file) }
 
             binding.changedFileName.text = file.name
 
