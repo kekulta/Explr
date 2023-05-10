@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -15,13 +17,11 @@ import ru.kekulta.explr.databinding.ActivityMainBinding
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.list.domain.models.enums.SortType
 import ru.kekulta.explr.features.main.domain.MainNavigator
+import ru.kekulta.explr.features.main.domain.models.LocationItem
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
-import ru.kekulta.explr.shared.utils.contentEquals
 import ru.kekulta.explr.shared.utils.gone
-import ru.kekulta.explr.shared.utils.hideScrollBar
-import ru.kekulta.explr.shared.utils.scrollToBottom
 import ru.kekulta.explr.shared.utils.visible
 
 
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory }
+    private val locationAdapter = LocationAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         )
 
-        binding.pathScrollview.hideScrollBar()
+        binding.locationRecycler.apply {
+            adapter = locationAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
 
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             viewModel.settingsClicked(menuItem.itemId)
@@ -65,35 +69,31 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 findItem(R.id.hidden_item).isChecked = state.filterState.showHidden
                 findItem(R.id.nomedia_item).isChecked = state.filterState.showNomedia
             }
-            (listOf(resources.getString(state.toolBarState.root.root)) + state.toolBarState.location.toList()).joinToString(
-                separator = " -> "
-            ).let { path ->
-                state.toolBarState.let { toolBarState ->
-                    binding.navigationView.menu.findItem(toolBarState.root.id).isChecked = true
 
-                    binding.topAppBar.menu.apply {
-                        findItem(R.id.sorting_item).isVisible = toolBarState.isSortingAvailable
-                        findItem(R.id.reverse_item).isVisible = toolBarState.isSortingAvailable
-                    }
+            state.toolBarState.let { toolBarState ->
+                binding.navigationView.menu.findItem(toolBarState.root.id).isChecked = true
 
-                    if (toolBarState.location.isEmpty()) {
-                        binding.pathTextview.gone()
-                        binding.pathTextview.text = ""
-                        binding.topAppBar.title = getString(toolBarState.root.root)
-                    } else {
-                        binding.pathTextview.visible()
-                        if (binding.pathTextview.text != path) {
-                            binding.pathTextview.text = path
-                            binding.pathScrollview.let { scroll ->
-                                scroll.post { scroll.scrollToBottom() }
-                            }
-                            binding.topAppBar.title = toolBarState.location.last()
-                        }
+                binding.topAppBar.menu.apply {
+                    findItem(R.id.sorting_item).isVisible = toolBarState.isSortingAvailable
+                    findItem(R.id.reverse_item).isVisible = toolBarState.isSortingAvailable
+                }
+                state.toolBarState.location.toList().map { LocationItem(it) }.let { list ->
+                    if (locationAdapter.itemCount != list.size) {
+                        locationAdapter.submitList(list)
+                        onLocationChanged()
                     }
                 }
 
-
+                if (toolBarState.location.isEmpty()) {
+                    binding.locationRecycler.gone()
+                    binding.topAppBar.title = getString(toolBarState.root.root)
+                } else {
+                    binding.locationRecycler.visible()
+                    binding.topAppBar.title = toolBarState.location.last()
+                }
             }
+
+
         }
         lifecycleScope.launch {
             viewModel.eventsFlow.collect { event ->
@@ -142,6 +142,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
+    }
+
+    private fun onLocationChanged() {
+        binding.locationRecycler.smoothScrollToPosition(locationAdapter.itemCount)
     }
 
     companion object {

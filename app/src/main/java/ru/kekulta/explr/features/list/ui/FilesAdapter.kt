@@ -20,7 +20,6 @@ import ru.kekulta.explr.shared.utils.visible
 
 class FilesAdapter :
     ListAdapter<FileRepresentation, FilesAdapter.Holder>(FileRepresentation.DIFF_CALLBACK) {
-    //TODO fix listener
     var onEventListener: ((FileClickEvent) -> Unit)? = null
 
 
