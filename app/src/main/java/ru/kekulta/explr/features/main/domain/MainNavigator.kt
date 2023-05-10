@@ -15,10 +15,12 @@ import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.navigation.api.Navigator
 import ru.kekulta.explr.shared.navigation.models.Backstack
+import ru.kekulta.explr.shared.navigation.models.Destination
 import ru.kekulta.explr.shared.navigation.models.Transaction
 import ru.kekulta.explr.shared.navigation.models.addToBackStack
 import ru.kekulta.explr.shared.navigation.models.lastDestination
 import ru.kekulta.explr.shared.navigation.models.popBackStack
+import java.lang.ref.WeakReference
 import kotlin.random.Random
 
 class MainNavigator(
@@ -26,7 +28,6 @@ class MainNavigator(
     private val fragmentManager: FragmentManager,
     @IdRes private val container: Int
 ) : Navigator {
-    //TODO fix/add backstack
     val random = Random(System.currentTimeMillis())
 
     override fun performCommand(
@@ -37,17 +38,25 @@ class MainNavigator(
         return when (command) {
             is Command.ForwardTo -> {
                 if (command.destination != backstack.lastDestination) {
+                    var back = backstack
                     fragmentManager.commit {
                         setReorderingAllowed(true)
                         setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         replace(
-
                             container, provideFragment(
                                 command.destination.destinationKey, command.destination.args
-                            )
+                            ).also {
+                                back = backstack.addToBackStack(
+                                    Transaction(
+                                        random.nextInt(),
+                                        command.destination,
+                                        WeakReference(it)
+                                    )
+                                )
+                            }
                         )
                     }
-                    backstack.addToBackStack(Transaction(random.nextInt(), command.destination))
+                    back
                 } else {
                     backstack
                 }
@@ -55,17 +64,26 @@ class MainNavigator(
 
             is Command.ReplaceTo -> {
                 if (command.destination != backstack.lastDestination) {
+                    var back = backstack
                     fragmentManager.commit {
                         setReorderingAllowed(true)
                         setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                         replace(
                             container, provideFragment(
                                 command.destination.destinationKey, command.destination.args
-                            )
+                            ).also {
+                                back = backstack.popBackStack()
+                                    .addToBackStack(
+                                        Transaction(
+                                            random.nextInt(),
+                                            command.destination,
+                                            WeakReference(it)
+                                        )
+                                    )
+                            }
                         )
                     }
-                    backstack.popBackStack()
-                        .addToBackStack(Transaction(random.nextInt(), command.destination))
+                    back
                 } else {
                     backstack
                 }
@@ -81,8 +99,10 @@ class MainNavigator(
                             setReorderingAllowed(true)
                             setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                             replace(
-                                container, provideFragment(
-                                    lastDestination!!.destinationKey, lastDestination!!.args
+                                container,
+                                stack.last().cache.get() ?: provideFragment(
+                                    lastDestination!!.destinationKey,
+                                    lastDestination!!.args
                                 )
                             )
                         }
