@@ -4,44 +4,44 @@
         <item
             android:id="@+id/recent_item"
             android:checkable="true"
-            android:icon="@drawable/recent_icon"
+            android:icon="@drawable/recent_icon_foreground"
             android:title="@string/recent_root" />
         <item
             android:id="@+id/image_item"
             android:checkable="true"
-            android:icon="@drawable/picture_icon"
+            android:icon="@drawable/picture_icon_foreground"
             android:title="@string/images_root" />
         <item
             android:id="@+id/videos_item"
             android:checkable="true"
-            android:icon="@drawable/video_icon"
+            android:icon="@drawable/video_icon_foreground"
             android:title="@string/videos_root" />
         <item
             android:id="@+id/audio_item"
             android:checkable="true"
-            android:icon="@drawable/audio_icon"
+            android:icon="@drawable/audio_icon_foreground"
             android:title="@string/audio_root" />
         <item
             android:id="@+id/documents_item"
             android:checkable="true"
-            android:icon="@drawable/document_icon"
+            android:icon="@drawable/document_icon_foreground"
             android:title="@string/documents_root" />
         <item
             android:id="@+id/downloads_item"
             android:checkable="true"
-            android:icon="@drawable/downloads_icon"
+            android:icon="@drawable/downloads_icon_foreground"
             android:title="@string/downloads_root" />
     </group>
     <group android:id="@+id/storages_group">
         <item
             android:id="@+id/internal_storage"
             android:checkable="true"
-            android:icon="@drawable/directory_icon"
+            android:icon="@drawable/directory_icon_foreground"
             android:title="@string/internal_storage_root" />
         <item
             android:id="@+id/diffs_storage"
             android:checkable="true"
-            android:icon="@drawable/difference_icon"
+            android:icon="@drawable/difference_icon_foreground"
             android:title="@string/changes_in_files" />
     </group>
 </menu>
