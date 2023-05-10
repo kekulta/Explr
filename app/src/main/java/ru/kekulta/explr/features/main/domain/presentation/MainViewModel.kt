@@ -1,6 +1,7 @@
 package ru.kekulta.explr.features.main.domain.presentation
 
 import android.os.Bundle
+import android.os.Environment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import ru.kekulta.explr.R
 import ru.kekulta.explr.di.MainServiceLocator
 import ru.kekulta.explr.features.difflist.domain.api.usecases.HashedInteractor
 import ru.kekulta.explr.features.difflist.ui.HashedListFragment
+import ru.kekulta.explr.features.list.domain.api.usecases.FilesInteractor
 import ru.kekulta.explr.features.list.domain.api.usecases.FilterManager
 import ru.kekulta.explr.features.list.domain.api.usecases.SortingManager
 import ru.kekulta.explr.features.list.domain.models.enums.Category
@@ -39,6 +41,7 @@ class MainViewModel(
     private val sortingManager: SortingManager,
     private val toolBarManager: ToolBarManager,
     private val hashedInteractor: HashedInteractor,
+    private val filesInteractor: FilesInteractor,
 ) :
     ViewModel() {
 
@@ -73,6 +76,9 @@ class MainViewModel(
             viewModelScope.launch {
                 hashedInteractor.updateStart()
             }
+            viewModelScope.launch {
+                filesInteractor.update(Environment.getExternalStorageDirectory().path)
+            }
             router.navigateToList(Category.STORAGE)
         }
     }
@@ -98,6 +104,9 @@ class MainViewModel(
     fun permissionsGranted() {
         viewModelScope.launch {
             hashedInteractor.updateStart()
+        }
+        viewModelScope.launch {
+            filesInteractor.update(Environment.getExternalStorageDirectory().path)
         }
         router.navigate(
             Command.Back
@@ -205,6 +214,7 @@ class MainViewModel(
                         provideSortingManager(),
                         provideToolBarManager(),
                         provideHashedInteractor(),
+                        provideFilesInteractor(),
                     )
                 }
             }

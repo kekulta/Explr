@@ -8,4 +8,4 @@ fun Backstack.addToBackStack(transaction: Transaction) = copy(stack = (stack + t
 
 fun Backstack.popBackStack() = copy(stack = stack.dropLast(1))
 
-val Backstack.lastDestination get() = stack.last().destination
+val Backstack.lastDestination get() = stack.lastOrNull()?.destination

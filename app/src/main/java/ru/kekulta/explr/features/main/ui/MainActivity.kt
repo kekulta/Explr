@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -17,6 +18,7 @@ import ru.kekulta.explr.features.main.domain.MainNavigator
 import ru.kekulta.explr.features.main.domain.models.MainEvent
 import ru.kekulta.explr.features.main.domain.presentation.MainViewModel
 import ru.kekulta.explr.shared.utils.checkFilesPermissions
+import ru.kekulta.explr.shared.utils.contentEquals
 import ru.kekulta.explr.shared.utils.gone
 import ru.kekulta.explr.shared.utils.hideScrollBar
 import ru.kekulta.explr.shared.utils.scrollToBottom

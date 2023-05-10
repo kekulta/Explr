@@ -7,6 +7,7 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import ru.kekulta.explr.R
 import ru.kekulta.explr.features.difflist.ui.HashedListFragment
 import ru.kekulta.explr.features.list.ui.FilesListFragment
 import ru.kekulta.explr.features.main.ui.PermissionsDeniedFragment
@@ -35,28 +36,39 @@ class MainNavigator(
         Log.d(LOG_TAG, "backstack: ${backstack.stack}")
         return when (command) {
             is Command.ForwardTo -> {
-                fragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace(
-                        container, provideFragment(
-                            command.destination.destinationKey, command.destination.args
+                if (command.destination != backstack.lastDestination) {
+                    fragmentManager.commit {
+                        setReorderingAllowed(true)
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        replace(
+
+                            container, provideFragment(
+                                command.destination.destinationKey, command.destination.args
+                            )
                         )
-                    )
+                    }
+                    backstack.addToBackStack(Transaction(random.nextInt(), command.destination))
+                } else {
+                    backstack
                 }
-                backstack.addToBackStack(Transaction(random.nextInt(), command.destination))
             }
 
             is Command.ReplaceTo -> {
-                fragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace(
-                        container, provideFragment(
-                            command.destination.destinationKey, command.destination.args
+                if (command.destination != backstack.lastDestination) {
+                    fragmentManager.commit {
+                        setReorderingAllowed(true)
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        replace(
+                            container, provideFragment(
+                                command.destination.destinationKey, command.destination.args
+                            )
                         )
-                    )
+                    }
+                    backstack.popBackStack()
+                        .addToBackStack(Transaction(random.nextInt(), command.destination))
+                } else {
+                    backstack
                 }
-                backstack.popBackStack()
-                    .addToBackStack(Transaction(random.nextInt(), command.destination))
             }
 
             is Command.Back -> {
@@ -67,9 +79,10 @@ class MainNavigator(
                     backstack.popBackStack().apply {
                         fragmentManager.commit {
                             setReorderingAllowed(true)
+                            setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                             replace(
                                 container, provideFragment(
-                                    lastDestination.destinationKey, lastDestination.args
+                                    lastDestination!!.destinationKey, lastDestination!!.args
                                 )
                             )
                         }

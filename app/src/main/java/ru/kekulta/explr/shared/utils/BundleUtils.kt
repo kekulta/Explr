@@ -29,3 +29,21 @@ fun <T : Serializable> Bundle.getSerializableSafe(key: String, clazz: Class<T>):
             null
         }
     }
+
+fun Bundle.contentEquals(two: Bundle): Boolean {
+    if (size() != two.size())
+        return false
+
+    if (!keySet().containsAll(two.keySet()))
+        return false
+
+    for (key in keySet()) {
+        val valueOne = get(key)
+        val valueTwo = two.get(key)
+        if (valueOne is Bundle && valueTwo is Bundle) {
+            if (!valueOne.contentEquals(valueTwo)) return false
+        } else if (valueOne != valueTwo) return false
+    }
+
+    return true
+}

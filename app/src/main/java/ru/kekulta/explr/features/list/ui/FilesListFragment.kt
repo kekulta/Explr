@@ -57,6 +57,16 @@ class FilesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.swipeContainer.setOnRefreshListener {
+            state?.let {
+                lifecycleScope.launch {
+                    viewModel.update(it.path)
+                }
+            }
+            binding.swipeContainer.isRefreshing = false
+        }
+
         state?.path?.let {
             lifecycleScope.launch {
                 viewModel.subscribe(it).collect { list ->

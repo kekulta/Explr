@@ -67,11 +67,11 @@ class FilesListViewModel(
     }
 
     fun subscribe(path: String): Flow<List<FileRepresentation>> =
-        filesInteractor.observeContent(path).also {
-            viewModelScope.launch {
-                filesInteractor.update(path)
-            }
-        }
+        filesInteractor.observeContent(path)
+
+    suspend fun update(path: String) {
+        filesInteractor.update(path)
+    }
 
     fun onResume(state: FilesListState?) {
         this.state = state
