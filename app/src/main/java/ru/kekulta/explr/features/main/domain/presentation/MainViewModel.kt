@@ -1,7 +1,6 @@
 package ru.kekulta.explr.features.main.domain.presentation
 
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +30,7 @@ import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.navigation.api.Navigator
 import ru.kekulta.explr.shared.navigation.api.Router
+import ru.kekulta.explr.shared.navigation.models.Backstack
 
 
 class MainViewModel(
@@ -50,6 +50,7 @@ class MainViewModel(
                 toolBarState = ToolBarState()
             )
         )
+    private var backstack = Backstack()
     private val eventChannel = Channel<MainEvent>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
     val state: LiveData<MainState> get() = _state
@@ -66,7 +67,7 @@ class MainViewModel(
     }
 
     fun onResume(navigator: Navigator) {
-        router.attachNavigator(navigator)
+        router.attachNavigator(navigator, backstack)
         if (!initialized) {
             initialized = true
             viewModelScope.launch {
@@ -81,7 +82,7 @@ class MainViewModel(
     }
 
     fun onPause() {
-        router.detachNavigator()
+        backstack = router.detachNavigator()
     }
 
     // TODO fix permission navigation
@@ -89,7 +90,7 @@ class MainViewModel(
     fun permissionsDenied() {
         router.navigate(
             Command.ReplaceTo(
-                destination = PermissionsDeniedFragment.DESTINATION_KEY
+                destinationKey = PermissionsDeniedFragment.DESTINATION_KEY
             )
         )
     }

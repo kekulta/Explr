@@ -2,6 +2,7 @@ package ru.kekulta.explr.features.main.domain
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -12,6 +13,12 @@ import ru.kekulta.explr.features.main.ui.PermissionsDeniedFragment
 import ru.kekulta.explr.features.main.ui.PermissionsRequestFragment
 import ru.kekulta.explr.shared.navigation.api.Command
 import ru.kekulta.explr.shared.navigation.api.Navigator
+import ru.kekulta.explr.shared.navigation.models.Backstack
+import ru.kekulta.explr.shared.navigation.models.Transaction
+import ru.kekulta.explr.shared.navigation.models.addToBackStack
+import ru.kekulta.explr.shared.navigation.models.lastDestination
+import ru.kekulta.explr.shared.navigation.models.popBackStack
+import kotlin.random.Random
 
 class MainNavigator(
     private val activity: Activity,
@@ -19,35 +26,54 @@ class MainNavigator(
     @IdRes private val container: Int
 ) : Navigator {
     //TODO fix/add backstack
+    val random = Random(System.currentTimeMillis())
 
     override fun performCommand(
         command: Command,
-        noAnimation: Boolean,
-    ) {
-        when (command) {
+        backstack: Backstack,
+    ): Backstack {
+        Log.d(LOG_TAG, "backstack: ${backstack.stack}")
+        return when (command) {
             is Command.ForwardTo -> {
                 fragmentManager.commit {
                     setReorderingAllowed(true)
-                    replace(container, provideFragment(command.destination, command.args))
-                    addToBackStack(null)
+                    replace(
+                        container, provideFragment(
+                            command.destination.destinationKey, command.destination.args
+                        )
+                    )
                 }
+                backstack.addToBackStack(Transaction(random.nextInt(), command.destination))
             }
 
             is Command.ReplaceTo -> {
-
-                fragmentManager.popBackStack()
                 fragmentManager.commit {
                     setReorderingAllowed(true)
-                    replace(container, provideFragment(command.destination, command.args))
-                    addToBackStack(null)
+                    replace(
+                        container, provideFragment(
+                            command.destination.destinationKey, command.destination.args
+                        )
+                    )
                 }
-
+                backstack.popBackStack()
+                    .addToBackStack(Transaction(random.nextInt(), command.destination))
             }
 
             is Command.Back -> {
-                fragmentManager.popBackStack()
-                if (fragmentManager.backStackEntryCount <= 1) {
+                if (backstack.stack.size <= 1) {
                     activity.finish()
+                    Backstack()
+                } else {
+                    backstack.popBackStack().apply {
+                        fragmentManager.commit {
+                            setReorderingAllowed(true)
+                            replace(
+                                container, provideFragment(
+                                    lastDestination.destinationKey, lastDestination.args
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }

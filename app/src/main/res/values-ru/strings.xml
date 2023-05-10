@@ -12,7 +12,7 @@
     <string name="audio_root">Аудио</string>
     <string name="documents_root">Документы</string>
     <string name="images_root">Изображения</string>
-    <string name="internal_storage_root">Внутренняя память</string>
+    <string name="internal_storage_root">Память устройства</string>
     <string name="downloads_root">Загрузки</string>
     <string name="recent_root">Недавние</string>
     <string name="no_root">Неизвестно</string>
@@ -50,4 +50,12 @@
     <string name="last_modified_details_placeholder">Время изменения: %2$d %1$s</string>
     <string name="mime_type_details_placeholder">MIME-тип: %1$s</string>
     <string name="file_type_details_placeholder">Тип файла: %1$s</string>
+    <string name="changes_in_files">Изменения в файлах</string>
+    <string name="diffs_root">Изменения</string>
+    <string name="new_files_title">Новые файлы</string>
+    <string name="old_files_title">Старые файлы</string>
+    <string name="changed_files_title">Изменённые файлы</string>
+    <string name="deleted_files_title">Удалённые файлы</string>
+    <string name="processing_files_title">Файлы в обработке</string>
+    <string name="undefined">Неопределено</string>
 </resources>
